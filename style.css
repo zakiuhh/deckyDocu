@@ -97,6 +97,10 @@ body * {
   }
 }
 
+a {
+  text-decoration: none;
+}
+
 /* ── Custom Cursor ── */
 #custom-cursor {
   position: fixed;
