@@ -1157,3 +1157,29 @@ body {
     height: 44px;
   }
 }
+
+/* ── Blueprint Images ── */
+.blueprint-img {
+  width: 100%;
+  margin: var(--space-5) 0 var(--space-8);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-warm);
+  overflow: hidden;
+  box-shadow: rgba(0, 0, 0, 0.06) 0px 4px 24px;
+}
+
+.blueprint-img img {
+  width: 100%;
+  height: auto;
+  display: block;
+  opacity: 0.92;
+  transition: opacity var(--transition);
+}
+
+.blueprint-img img:hover {
+  opacity: 1;
+}
+
+body.dark-theme .blueprint-img img {
+  opacity: 0.85;
+}
