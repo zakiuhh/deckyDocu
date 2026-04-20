@@ -81,6 +81,26 @@ function toggleSidebar() {
   }
 })();
 
+// ── Dark / Light Theme Toggle ─────────────────────────
+function toggleTheme() {
+  const isDark = document.body.classList.toggle("dark-theme");
+  localStorage.setItem("theme", isDark ? "dark" : "light");
+  updateThemeLabel(isDark);
+}
+
+function updateThemeLabel(isDark) {
+  const label = document.getElementById("themeLabel");
+  if (label) label.textContent = isDark ? "Dark Mode" : "Light Mode";
+}
+
+(function () {
+  const saved = localStorage.getItem("theme");
+  if (saved === "dark") {
+    document.body.classList.add("dark-theme");
+    document.addEventListener("DOMContentLoaded", () => updateThemeLabel(true));
+  }
+})();
+
 // ── Interactive Tilt Cards ────────────────────────────
 function initInteractiveCards() {
   const cards = document.querySelectorAll(".spec-card, .module-card, .mission-card");
@@ -107,33 +127,22 @@ function initColorPicker() {
   const savedColor = localStorage.getItem("accentColorV2");
   if (savedColor) applyColor(savedColor);
 
-  function hexToRgb(hex) {
-    const r = parseInt(hex.slice(1, 3), 16);
-    const g = parseInt(hex.slice(3, 5), 16);
-    const b = parseInt(hex.slice(5, 7), 16);
-    return { r, g, b };
-  }
-
   function applyColor(color) {
     root.style.setProperty("--accent", color);
-    // Derive accent-dim from the color
     if (color.startsWith("oklch(")) {
-      // Insert alpha into oklch
-      const dimColor = color.replace(")", " / 0.07)");
-      root.style.setProperty("--accent-dim", dimColor);
+      root.style.setProperty("--accent-dim", color.replace(")", " / 0.07)"));
     } else if (color.startsWith("#")) {
-      const r = parseInt(color.slice(1,3),16);
-      const g = parseInt(color.slice(3,5),16);
-      const b = parseInt(color.slice(5,7),16);
+      const r = parseInt(color.slice(1, 3), 16);
+      const g = parseInt(color.slice(3, 5), 16);
+      const b = parseInt(color.slice(5, 7), 16);
       root.style.setProperty("--accent-dim", `rgba(${r},${g},${b},0.07)`);
     }
-
-    swatches.forEach(s => s.classList.remove("active"));
-    const activeSwatch = Array.from(swatches).find(s => s.dataset.color === color);
+    swatches.forEach((s) => s.classList.remove("active"));
+    const activeSwatch = Array.from(swatches).find((s) => s.dataset.color === color);
     if (activeSwatch) activeSwatch.classList.add("active");
   }
 
-  swatches.forEach(swatch => {
+  swatches.forEach((swatch) => {
     swatch.addEventListener("click", () => {
       const col = swatch.dataset.color;
       applyColor(col);
@@ -194,7 +203,7 @@ function initCustomCursor() {
 
   document.body.addEventListener("mouseover", (e) => {
     const magneticEl = e.target.closest(".spec-card, .module-card, .mission-card");
-    const clickableEl = e.target.closest("a, .nav-item, .color-swatch, .fnav-btn, .sb-toggle");
+    const clickableEl = e.target.closest("a, .nav-item, .color-swatch, .fnav-btn, .sb-toggle, .theme-btn");
     if (magneticEl) {
       hoverTarget = magneticEl;
       cachedBorderRadius = window.getComputedStyle(magneticEl).borderRadius || "4px";
@@ -209,7 +218,7 @@ function initCustomCursor() {
 
   document.body.addEventListener("mouseout", (e) => {
     const magneticEl = e.target.closest(".spec-card, .module-card, .mission-card");
-    const clickableEl = e.target.closest("a, .nav-item, .color-swatch, .fnav-btn, .sb-toggle");
+    const clickableEl = e.target.closest("a, .nav-item, .color-swatch, .fnav-btn, .sb-toggle, .theme-btn");
     if (magneticEl || clickableEl) {
       hoverTarget = null;
       cursor.classList.remove("magnetic", "hover");
@@ -231,8 +240,10 @@ function initProgressBar() {
 
 // ── Keyboard Navigation ───────────────────────────────
 function initKeyboardNav() {
-  const keyMap = { "0": "overview", "1": "propulsion", "2": "stealth", "3": "control",
-    "4": "missile", "5": "cyber", "6": "sensory", "7": "missions", "8": "compat" };
+  const keyMap = {
+    "0": "overview", "1": "propulsion", "2": "stealth", "3": "control",
+    "4": "missile", "5": "cyber", "6": "sensory", "7": "missions", "8": "compat"
+  };
   document.addEventListener("keydown", (e) => {
     if (e.target.tagName === "INPUT" || e.target.tagName === "TEXTAREA") return;
     if (e.ctrlKey || e.metaKey || e.altKey) return;
@@ -250,4 +261,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const overlay = document.getElementById("sidebar-overlay");
   if (overlay) overlay.addEventListener("click", () => document.body.classList.remove("sidebar-open"));
+
+  // Sync theme label on load
+  const isDark = document.body.classList.contains("dark-theme");
+  updateThemeLabel(isDark);
 });

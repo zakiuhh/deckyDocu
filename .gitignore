@@ -1,6 +1,7 @@
 # ── AI Agent Skills (local only, not for repo) ──
 .agents/
 impaccable/
+assets/
 
 # ── Design Context (optional — remove next line if you want to keep it) ──
 .impeccable.md
