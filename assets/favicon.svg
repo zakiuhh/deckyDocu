@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- Dark background rounded rect -->
+  <rect width="32" height="32" rx="7" fill="#141413"/>
+  <!-- Terracotta hex outline (accent ring) -->
+  <polygon points="16,3 28,9 28,23 16,29 4,23 4,9"
+           fill="none" stroke="#c96442" stroke-width="1.5" stroke-linejoin="round"/>
+  <!-- Parchment solid hex (inner icon) -->
+  <polygon points="16,8 23,12 23,20 16,24 9,20 9,12"
+           fill="#f5f4ed"/>
+  <!-- Dark cutout inner diamond for depth -->
+  <polygon points="16,12 20,15 16,20 12,15"
+           fill="#141413"/>
+</svg>
