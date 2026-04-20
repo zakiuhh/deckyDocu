@@ -1,0 +1,17 @@
+# ── AI Agent Skills (local only, not for repo) ──
+.agents/
+impaccable/
+
+# ── Design Context (optional — remove next line if you want to keep it) ──
+.impeccable.md
+
+# ── OS & Editor junk ──
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ── VS Code local settings ──
+.vscode/
+
+# ── Node (if ever used) ──
+node_modules/

@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description"
+    content="DECKY CAP Drone — Technical documentation for a next-generation autonomous aerial combat platform featuring hypersonic propulsion, AI fire control, and multi-spectrum stealth systems." />
+  <title>DECKY CAP — Documentation</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Figtree:wght@300;400;500;600&family=Fira+Code:wght@400;500&display=swap"
+    rel="stylesheet" />
+
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+
+  <div id="progress-bar"></div>
+  <div id="custom-cursor"></div>
+
+  <header>
+    <div class="hd-left">
+      <button class="sb-toggle" id="sbToggle" onclick="toggleSidebar()" aria-label="Toggle sidebar">
+        <svg class="sb-toggle-icon" id="sbToggleIcon" viewBox="0 0 20 20" fill="none" stroke="currentColor"
+          stroke-width="1.8" stroke-linecap="round">
+          <line x1="3" y1="5" x2="17" y2="5" />
+          <line x1="3" y1="10" x2="17" y2="10" />
+          <line x1="3" y1="15" x2="17" y2="15" />
+        </svg>
+      </button>
+      <div class="logo-mark">
+        <svg viewBox="0 0 16 16"><path d="M8 1L15 5V11L8 15L1 11V5L8 1Z" /></svg>
+      </div>
+      <span class="logo-title">DECKY<span> CAP</span></span>
+      <div class="hd-div"></div>
+      <span class="hd-sub">Documentation</span>
+    </div>
+    <div class="hd-right">
+      <span class="tag tag-r">Research Paper</span>
+      <span class="tag tag-c">Classified Concept</span>
+      <span class="vtag">v1.0</span>
+    </div>
+  </header>
+
+  <div class="layout">
+    <div id="sidebar-overlay"></div>
+
+    <aside>
+      <div class="sb-label">Getting Started</div>
+      <div class="nav-item active" onclick="show('overview')"><span class="nav-num">00</span> Overview</div>
+
+      <div class="sb-label">Core Systems</div>
+      <div class="nav-item" onclick="show('propulsion')"><span class="nav-num">01</span> Propulsion — XH-800</div>
+      <div class="nav-item" onclick="show('stealth')"><span class="nav-num">02</span> Stealth &amp; Structure</div>
+      <div class="nav-item" onclick="show('control')"><span class="nav-num">03</span> Control — HCFS-X</div>
+      <div class="nav-item" onclick="show('missile')"><span class="nav-num">04</span> VALKYRIE-X Missile</div>
+
+      <div class="sb-label">Advanced</div>
+      <div class="nav-item" onclick="show('cyber')"><span class="nav-num">05</span> Cybersecurity</div>
+      <div class="nav-item" onclick="show('sensory')"><span class="nav-num">06</span> Sensory Suite</div>
+
+      <div class="sb-label">Deployment</div>
+      <div class="nav-item" onclick="show('missions')"><span class="nav-num">07</span> Mission Profiles</div>
+      <div class="nav-item" onclick="show('compat')"><span class="nav-num">08</span> Platform Compatibility</div>
+
+      <div class="sb-label">Appearance</div>
+      <div class="color-picker" id="colorPicker">
+        <button class="color-swatch active" style="--swatch: oklch(42% 0.10 265);" data-color="oklch(42% 0.10 265)" aria-label="Ink Blue"></button>
+        <button class="color-swatch" style="--swatch: oklch(40% 0.12 155);" data-color="oklch(40% 0.12 155)" aria-label="Forest"></button>
+        <button class="color-swatch" style="--swatch: oklch(40% 0.13 27);" data-color="oklch(40% 0.13 27)" aria-label="Burgundy"></button>
+        <button class="color-swatch" style="--swatch: oklch(45% 0.06 250);" data-color="oklch(45% 0.06 250)" aria-label="Slate"></button>
+        <button class="color-swatch" style="--swatch: oklch(55% 0.14 60);" data-color="oklch(55% 0.14 60)" aria-label="Amber"></button>
+        <button class="color-swatch" style="--swatch: oklch(22% 0.005 250);" data-color="oklch(22% 0.005 250)" aria-label="Charcoal"></button>
+      </div>
+    </aside>
+
+    <main>
+
+      <!-- OVERVIEW -->
+      <div class="section active" id="sec-overview">
+        <div class="sec-eyebrow">Introduction</div>
+        <div class="sec-title">DECKY CAP Drone</div>
+        <div class="sec-desc">The Apex of Autonomous Aerospace Combat — a conceptual next-generation platform designed
+          to dominate future battlespaces.</div>
+
+        <div class="hero-box">
+          <div class="hero-tags">
+            <span class="tag tag-r">Research Concept</span>
+            <span class="tag tag-c">Classified — Academic Use</span>
+          </div>
+          <div class="hero-title">Autonomous Aerial Dominance Redefined</div>
+          <p>The DECKY CAP Drone fuses technologies from sixth-generation jets, hypersonic propulsion, AI-driven swarm
+            warfare, and adaptive stealth into one integrated system-of-systems — redefining what drones are capable of.</p>
+        </div>
+
+        <h3>What is DECKY CAP?</h3>
+        <p>The future of aerial warfare is shifting towards autonomy, speed, and smart swarm integration. Traditional
+          distinctions between drones, fighters, and missiles are blurring. The DECKY CAP Drone positions itself at this
+          convergence — capable of engaging targets across multiple domains, coordinating with manned assets, and
+          dynamically adapting to rapidly evolving threat environments.</p>
+
+        <div class="divider reveal"></div>
+        <h3>Key Subsystems at a Glance</h3>
+        <div class="spec-grid">
+          <div class="spec-card"><div class="spec-label">Propulsion</div><div class="spec-val">XH-800 Hydra</div></div>
+          <div class="spec-card"><div class="spec-label">Top Speed</div><div class="spec-val">Mach 6–8</div></div>
+          <div class="spec-card"><div class="spec-label">Max Altitude</div><div class="spec-val">150,000 ft</div></div>
+          <div class="spec-card"><div class="spec-label">Fire Control</div><div class="spec-val">HCFS-X</div></div>
+          <div class="spec-card"><div class="spec-label">Missile</div><div class="spec-val">VALKYRIE-X</div></div>
+          <div class="spec-card"><div class="spec-label">Stealth Body</div><div class="spec-val">Chameleon-Wing</div></div>
+        </div>
+
+        <div class="divider reveal"></div>
+        <h3>References</h3>
+        <ul class="doc-list">
+          <li>Academic papers — IEEE, ACM, AIAA</li>
+          <li>Official defense publications — DARPA, IAF, HAL</li>
+          <li>Manufacturer specs — GE Aviation, Venus Aerospace, Aselsan, Leonardo</li>
+          <li>Open-source intelligence on emerging systems</li>
+        </ul>
+
+        <div class="authors-strip">
+          <span class="au-label">Authors</span>
+          <div class="au-chip"><div class="au-av">UK</div> Umar Khattab</div>
+          <div class="au-chip"><div class="au-av">ZK</div> Zaki</div>
+        </div>
+
+        <div class="sec-footer">
+          <span></span>
+          <button class="fnav-btn" onclick="show('propulsion')">Propulsion System →</button>
+        </div>
+      </div>
+
+      <!-- PROPULSION -->
+      <div class="section" id="sec-propulsion">
+        <div class="sec-eyebrow">Section 01 — Core Systems</div>
+        <div class="sec-title">XH-800 Hydra Hypersonic Engine</div>
+        <div class="sec-desc">A hybrid multi-mode propulsion system operating from subsonic takeoff all the way to Mach
+          8 and exo-atmospheric conditions.</div>
+
+        <div class="callout">
+          <div class="callout-title">System Overview</div>
+          <p>The XH-800 integrates turbofan, ramjet, rotating detonation engine (RDRE), scramjet, and rocket
+            technologies into a single unified propulsion architecture.</p>
+        </div>
+
+        <h3>Stage Breakdown</h3>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Stage</th><th>Technology</th><th>Function</th></tr></thead>
+            <tbody>
+              <tr><td class="tdb">Subsonic – Mach 1</td><td>GE XA100-like Turbofan</td><td>Takeoff &amp; cruise</td></tr>
+              <tr><td class="tdb">Mach 1 – 3</td><td>Ramjet</td><td>Efficient mid-speed thrust</td></tr>
+              <tr><td class="tdb">Mach 3 – 8</td><td>RDRE + Scramjet</td><td>Continuous hypersonic flight</td></tr>
+              <tr><td class="tdb">Space-Transition</td><td>Rocket Augmenter</td><td>Exo-atmospheric capability</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="divider reveal"></div>
+        <h3>Materials &amp; Cooling</h3>
+        <ul class="doc-list">
+          <li>Ceramic Matrix Composites (CMC) and nano-cooled turbine blades</li>
+          <li>Fuel-regenerative cooling and plasma shielding</li>
+        </ul>
+
+        <h3>Fuel Options</h3>
+        <div class="spec-grid">
+          <div class="spec-card"><div class="spec-label">Primary Fuels</div><div class="spec-val">JP-7 / JP-10 / H₂</div></div>
+          <div class="spec-card"><div class="spec-label">Optional (RDRE)</div><div class="spec-val">Liquid Methane</div></div>
+        </div>
+
+        <div class="sec-footer">
+          <button class="fnav-btn" onclick="show('overview')">← Overview</button>
+          <button class="fnav-btn" onclick="show('stealth')">Stealth &amp; Structure →</button>
+        </div>
+      </div>
+
+      <!-- STEALTH -->
+      <div class="section" id="sec-stealth">
+        <div class="sec-eyebrow">Section 02 — Core Systems</div>
+        <div class="sec-title">Chameleon-Wing Stealth Body</div>
+        <div class="sec-desc">A multi-spectrum stealth airframe designed for aerodynamic invisibility across radar,
+          infrared, and optical detection domains.</div>
+
+        <h3>Stealth Geometry</h3>
+        <ul class="doc-list">
+          <li>Seamless freeform composite body with no right angles</li>
+          <li>Inspired by manta ray &amp; dolphin profiles for aerodynamic invisibility</li>
+        </ul>
+
+        <div class="divider reveal"></div>
+        <h3>Radar Absorption</h3>
+        <div class="module-grid">
+          <div class="module-card">
+            <div class="mc-name">NanoIronCloak Paint</div>
+            <div class="mc-desc">Smart RAM that adapts based on radar frequency in real-time</div>
+          </div>
+          <div class="module-card">
+            <div class="mc-name">Active EM Cloaking</div>
+            <div class="mc-desc">Emits counter-phase radar pulses to erase reflections</div>
+          </div>
+        </div>
+
+        <div class="divider reveal"></div>
+        <h3>Infrared &amp; Optical Camouflage</h3>
+        <div class="module-grid">
+          <div class="module-card">
+            <div class="mc-name">SolarFlux Cloaking</div>
+            <div class="mc-desc">Adaptive photochromic skin that blends with sky/horizon</div>
+          </div>
+          <div class="module-card">
+            <div class="mc-name">IR Suppression</div>
+            <div class="mc-desc">Microfluidic heat dispersal grid reduces thermal signature</div>
+          </div>
+        </div>
+
+        <div class="sec-footer">
+          <button class="fnav-btn" onclick="show('propulsion')">← Propulsion</button>
+          <button class="fnav-btn" onclick="show('control')">Control System →</button>
+        </div>
+      </div>
+
+      <!-- CONTROL -->
+      <div class="section" id="sec-control">
+        <div class="sec-eyebrow">Section 03 — Core Systems</div>
+        <div class="sec-title">HCFS-X Fire Control System</div>
+        <div class="sec-desc">Heavy Control and Fire System — Experimental. An AI-centric architecture managing
+          autonomous combat decisions, sensor fusion, and swarm coordination.</div>
+
+        <h3>AI-Centric Architecture</h3>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Module</th><th>Function</th></tr></thead>
+            <tbody>
+              <tr><td class="tdb">AI Combat Coordinator</td><td>Autonomous threat prioritization</td></tr>
+              <tr><td class="tdb">Unified Control Grid</td><td>Jet + drone swarm management</td></tr>
+              <tr><td class="tdb">Quantum-Encrypted Data Link</td><td>Secure, jamming-resistant command relay</td></tr>
+              <tr><td class="tdb">Sensor Fusion Hub</td><td>Merges LIDAR, EO/IR, AESA into real-time battlespace map</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="divider reveal"></div>
+        <h3>Firepower Suite</h3>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>System</th><th>Features</th></tr></thead>
+            <tbody>
+              <tr><td class="tdb">MURAD++ AESA</td><td>360° scan, maritime &amp; subterranean tracking</td></tr>
+              <tr><td class="tdb">Directed Energy Turret</td><td>65kW solid-state laser for close-range threats</td></tr>
+              <tr><td class="tdb">EMP Pulse Module</td><td>Disables UAVs/drones within 1 km</td></tr>
+              <tr><td class="tdb">BriteCloud-X Pods</td><td>Advanced decoys with adaptive jamming</td></tr>
+              <tr><td class="tdb">Rotating Fire Core</td><td>Auto-targets up to 24 threats simultaneously</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="divider reveal"></div>
+        <h3>Pilot / Operator Interface</h3>
+        <ul class="doc-list">
+          <li>Augmented Reality HUD with 4D battlespace overlay</li>
+          <li>Neural Command Assist — eye-tracking + muscle movement-based control</li>
+          <li>Voice Override AI Interface</li>
+        </ul>
+
+        <div class="sec-footer">
+          <button class="fnav-btn" onclick="show('stealth')">← Stealth</button>
+          <button class="fnav-btn" onclick="show('missile')">VALKYRIE-X →</button>
+        </div>
+      </div>
+
+      <!-- MISSILE -->
+      <div class="section" id="sec-missile">
+        <div class="sec-eyebrow">Section 04 — Core Systems</div>
+        <div class="sec-title">VALKYRIE-X Smart Missile</div>
+        <div class="sec-desc">An AI-linked next-generation missile family with real-time target reassignment, stealth
+          morphing, and adaptive warhead technologies.</div>
+
+        <div class="callout">
+          <div class="callout-title">Two Variants</div>
+          <p>Available as Valkyrie-S (Mini) for precision engagement and Valkyrie-X (Full) for maximum lethality and
+            extended range.</p>
+        </div>
+
+        <h3>Technical Specifications</h3>
+        <div class="spec-grid">
+          <div class="spec-card"><div class="spec-label">Speed</div><div class="spec-val">Mach 0.9–6.5</div></div>
+          <div class="spec-card"><div class="spec-label">Guidance</div><div class="spec-val">AESA + IR + AI</div></div>
+          <div class="spec-card"><div class="spec-label">Stealth</div><div class="spec-val">Nano morphing skin</div></div>
+          <div class="spec-card"><div class="spec-label">Warhead</div><div class="spec-val">EMP + Frag + Shaped</div></div>
+          <div class="spec-card"><div class="spec-label">Connectivity</div><div class="spec-val">Quantum mesh-net</div></div>
+          <div class="spec-card"><div class="spec-label">Targeting</div><div class="spec-val">Real-time reassignment</div></div>
+        </div>
+
+        <div class="sec-footer">
+          <button class="fnav-btn" onclick="show('control')">← Control System</button>
+          <button class="fnav-btn" onclick="show('cyber')">Cybersecurity →</button>
+        </div>
+      </div>
+
+      <!-- CYBER -->
+      <div class="section" id="sec-cyber">
+        <div class="sec-eyebrow">Section 05 — Advanced</div>
+        <div class="sec-title">Cybersecurity &amp; Fail-safe Systems</div>
+        <div class="sec-desc">A 3-layer redundant control architecture ensuring mission continuity, intrusion
+          resistance, and self-protection under cyber attack.</div>
+
+        <h3>3-Layer Control Architecture</h3>
+        <div class="module-grid">
+          <div class="module-card">
+            <div class="mc-name">Primary Control</div>
+            <div class="mc-desc">Normal mission execution under standard operating conditions</div>
+          </div>
+          <div class="module-card">
+            <div class="mc-name">Intrusion Takeover</div>
+            <div class="mc-desc">Secure retake upon detection of cyber attack or signal hijack</div>
+          </div>
+          <div class="module-card">
+            <div class="mc-name">Self-Destruct Protocol</div>
+            <div class="mc-desc">Encrypted data wipe + physical neutralization as last resort</div>
+          </div>
+        </div>
+
+        <div class="divider reveal"></div>
+        <h3>Implementation</h3>
+        <ul class="doc-list">
+          <li>Redundant processors in secure enclaves — e.g., ARM TrustZone</li>
+          <li>Cryptographic command authentication</li>
+          <li>Quantum-encrypted communication links</li>
+        </ul>
+
+        <div class="sec-footer">
+          <button class="fnav-btn" onclick="show('missile')">← VALKYRIE-X</button>
+          <button class="fnav-btn" onclick="show('sensory')">Sensory Suite →</button>
+        </div>
+      </div>
+
+      <!-- SENSORY -->
+      <div class="section" id="sec-sensory">
+        <div class="sec-eyebrow">Section 06 — Advanced</div>
+        <div class="sec-title">Sensory Dominance Suite</div>
+        <div class="sec-desc">A comprehensive multi-spectrum sensor array providing total environmental awareness across
+          visual, infrared, radar, and electronic domains.</div>
+
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Module</th><th>Components</th><th>Purpose</th></tr></thead>
+            <tbody>
+              <tr><td class="tdb">360° Surveillance</td><td>AI-enhanced PTZ cameras</td><td>Complete visual awareness</td></tr>
+              <tr><td class="tdb">UV + IR Detection</td><td>LWIR, UV cameras</td><td>Missile &amp; heat source detection</td></tr>
+              <tr><td class="tdb">Radar Signal Interference</td><td>DRFM jammers, spoofers</td><td>Radar evasion and deception</td></tr>
+              <tr><td class="tdb">Metamaterial Coating</td><td>Nanotube mesh</td><td>Absorbs radar energy</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="sec-footer">
+          <button class="fnav-btn" onclick="show('cyber')">← Cybersecurity</button>
+          <button class="fnav-btn" onclick="show('missions')">Mission Profiles →</button>
+        </div>
+      </div>
+
+      <!-- MISSIONS -->
+      <div class="section" id="sec-missions">
+        <div class="sec-eyebrow">Section 07 — Deployment</div>
+        <div class="sec-title">Mission Profiles</div>
+        <div class="sec-desc">DECKY CAP is designed to execute a wide range of offensive, defensive, and support
+          missions across all domains.</div>
+
+        <div class="mission-grid">
+          <div class="mission-card">
+            <div class="mission-icon">🛡️</div>
+            <div>
+              <h4>SEAD Operations</h4>
+              <p>Stealth suppression of enemy air defense systems</p>
+            </div>
+          </div>
+          <div class="mission-card">
+            <div class="mission-icon">🤖</div>
+            <div>
+              <h4>Swarm Coordination</h4>
+              <p>Autonomous swarm drone coordination and command</p>
+            </div>
+          </div>
+          <div class="mission-card">
+            <div class="mission-icon">⚡</div>
+            <div>
+              <h4>Hypersonic Interdiction</h4>
+              <p>Mach 6–8 strikes against time-critical targets</p>
+            </div>
+          </div>
+          <div class="mission-card">
+            <div class="mission-icon">🎯</div>
+            <div>
+              <h4>Loitering Munitions</h4>
+              <p>Persistent loitering munitions deployment</p>
+            </div>
+          </div>
+          <div class="mission-card">
+            <div class="mission-icon">💥</div>
+            <div>
+              <h4>Deep Strike</h4>
+              <p>Airbase denial and long-range strategic strike missions</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="sec-footer">
+          <button class="fnav-btn" onclick="show('sensory')">← Sensory Suite</button>
+          <button class="fnav-btn" onclick="show('compat')">Platform Compatibility →</button>
+        </div>
+      </div>
+
+      <!-- COMPAT -->
+      <div class="section" id="sec-compat">
+        <div class="sec-eyebrow">Section 08 — Deployment</div>
+        <div class="sec-title">Platform Compatibility</div>
+        <div class="sec-desc">DECKY CAP is designed for multi-domain interoperability — deployable from air, naval, and
+          ground platforms across allied systems.</div>
+
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Platform</th><th>Compatible Systems</th></tr></thead>
+            <tbody>
+              <tr><td class="tdb">Jets</td><td>F-35, Su-57, AMCA, Loyal Wingman</td></tr>
+              <tr><td class="tdb">Drones</td><td>MQ-9, Kizilelma, Ghatak UCAV</td></tr>
+              <tr><td class="tdb">Naval</td><td>VLS deployment-ready</td></tr>
+              <tr><td class="tdb">Ground</td><td>Mobile catapult launcher support</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="divider reveal"></div>
+
+        <div class="callout">
+          <div class="callout-title">Conclusion</div>
+          <p>The DECKY CAP Drone embodies the convergence of multiple next-gen aerospace and defense innovations. With
+            its integrated AI fire control, hypersonic propulsion, stealth geometry, and autonomous combat
+            decision-making, it positions itself not just as a drone — but as a dominant force multiplier in the future
+            of aerial warfare.</p>
+        </div>
+
+        <div class="authors-strip">
+          <span class="au-label">Research by</span>
+          <div class="au-chip"><div class="au-av">UKM</div> Umar Khattab Malik</div>
+          <div class="au-chip"><div class="au-av">ZUH</div> Zaki Ul Hassan</div>
+        </div>
+
+        <div class="sec-footer">
+          <button class="fnav-btn" onclick="show('missions')">← Mission Profiles</button>
+          <button class="fnav-btn" onclick="show('overview')">Back to Overview →</button>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+
+</html>
