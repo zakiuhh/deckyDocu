@@ -65,6 +65,13 @@
     </div>
 
     <div class="hd-right">
+      <button class="export-spec-btn" id="headerExportBtn" aria-label="Export machine-readable JSON specification">
+        <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 2H5a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7z" />
+          <polyline points="12 2 12 7 17 7" />
+        </svg>
+        <span>Export Spec</span>
+      </button>
       <span class="tag tag-r">Aero Research</span>
       <span class="tag tag-c">Restricted / Level-6</span>
       <span class="vtag">v2.0-spec</span>
@@ -93,12 +100,11 @@
       <div class="nav-item" onclick="show('missions')"><span class="nav-num">07</span> Mission Profiles</div>
       <div class="nav-item" onclick="show('compat')"><span class="nav-num">08</span> Multi-Domain Interop</div>
 
-      <div class="sb-label">Monograph Mode</div>
+      <div class="sb-label">Operator Telemetry</div>
 
       <!-- Theme Toggle -->
       <div class="theme-toggle-wrap">
         <button class="theme-btn" id="themeToggle" onclick="toggleTheme()" aria-label="Toggle theme">
-          <!-- Sun icon (light mode) -->
           <svg class="theme-icon-light" viewBox="0 0 20 20" fill="none" stroke-width="1.8" stroke-linecap="round"
             stroke-linejoin="round">
             <circle cx="10" cy="10" r="3.5" />
@@ -111,12 +117,22 @@
             <line x1="15.8" y1="4.2" x2="14.4" y2="5.6" />
             <line x1="5.6" y1="14.4" x2="4.2" y2="15.8" />
           </svg>
-          <!-- Moon icon (dark mode) -->
           <svg class="theme-icon-dark" viewBox="0 0 20 20" fill="none" stroke-width="1.8" stroke-linecap="round"
             stroke-linejoin="round">
             <path d="M17 12.5A7 7 0 0 1 7.5 3a7 7 0 1 0 9.5 9.5z" />
           </svg>
           <span id="themeLabel">Light Monograph</span>
+        </button>
+      </div>
+
+      <!-- Audio Mute Toggle -->
+      <div class="audio-toggle-wrap">
+        <button class="audio-btn" id="audioToggle" aria-label="Toggle tactical interface audio feedback">
+          <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="width: 13px; height: 13px;">
+            <polygon points="9 4 4 8 1 8 1 12 4 12 9 16 9 4" />
+            <path d="M14 6.5a5 5 0 0 1 0 7" />
+          </svg>
+          <span id="audioLabel">Tactical Audio: Active</span>
         </button>
       </div>
     </aside>
@@ -223,7 +239,7 @@
           </div>
 
           <div class="sec-footer">
-            <span></span>
+            <button class="export-spec-btn" onclick="document.getElementById('headerExportBtn').click()">📋 Export JSON Spec</button>
             <button class="fnav-btn" onclick="show('propulsion')">Section 01: Propulsion System →</button>
           </div>
         </div>
@@ -245,124 +261,137 @@
           <h2 class="sec-title">XH-800 Hydra Multi-Mode Propulsion Core</h2>
           <div class="sec-desc">A unified combined-cycle hypersonic engine architecture seamlessly transitioning across adaptive turbofan, ramjet, rotating detonation (RDRE), scramjet, and rocket booster regimes.</div>
 
-          <div class="callout">
-            <div class="callout-title">Propulsion Mechanics</div>
-            <p>The XH-800 Hydra utilizes continuous rotating detonation waves to achieve pressure-gain combustion, minimizing fuel mass requirements during sustained hypersonic dash profiles up to Mach 8.0.</p>
+          <!-- MONOGRAPH TABS -->
+          <div class="monograph-tabs">
+            <button class="mono-tab-btn active" data-tab="stages">Flight Stages &amp; Corridor</button>
+            <button class="mono-tab-btn" data-tab="chemistry">Fuel Chemistry &amp; Storage</button>
+            <button class="mono-tab-btn" data-tab="thermal">Thermal Protection &amp; Cooling</button>
           </div>
 
-          <!-- SCHEMATIC IMAGE -->
-          <div class="blueprint-img">
-            <img src="assets/images/01.png" alt="XH-800 Hydra Multi-Stage Combined Engine Schematic" />
+          <div class="mono-tab-panel active" data-panel="stages">
+            <div class="callout">
+              <div class="callout-title">Propulsion Mechanics</div>
+              <p>The XH-800 Hydra utilizes continuous rotating detonation waves to achieve pressure-gain combustion, minimizing fuel mass requirements during sustained hypersonic dash profiles up to Mach 8.0.</p>
+            </div>
+
+            <!-- SCHEMATIC IMAGE -->
+            <div class="blueprint-img">
+              <img src="assets/images/01.png" alt="XH-800 Hydra Multi-Stage Combined Engine Schematic" />
+            </div>
+
+            <!-- AEROSPACE FORMULA CARD -->
+            <div class="math-card">
+              <div class="math-header">
+                <span>Thermodynamic Cycle</span>
+                <span>Chapman-Jouguet Detonation Velocity</span>
+              </div>
+              <div class="math-equation">
+                D_CJ = √[ 2 · (γ² - 1) · q_R ]
+              </div>
+              <div class="math-legend">
+                Calculates continuous supersonic detonation front velocity across the annular combustor ring, providing 22% higher thermal efficiency over conventional Brayton cycles.
+              </div>
+            </div>
+
+            <h3>Flight Envelope Stage Breakdown</h3>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Flight Regime</th>
+                    <th>Operating Architecture</th>
+                    <th>Specific Impulse (Isp)</th>
+                    <th>Primary Function</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="tdb">Subsonic – Mach 1.5</td>
+                    <td>Adaptive High-Bypass Turbofan</td>
+                    <td>3,800 s</td>
+                    <td>Runway launch, loiter &amp; cruise</td>
+                  </tr>
+                  <tr>
+                    <td class="tdb">Mach 1.5 – Mach 3.5</td>
+                    <td>Subsonic-Combustion Ramjet</td>
+                    <td>2,200 s</td>
+                    <td>Supersonic acceleration</td>
+                  </tr>
+                  <tr>
+                    <td class="tdb">Mach 3.5 – Mach 8.0</td>
+                    <td>Dual-Mode RDRE + Scramjet</td>
+                    <td>1,650 s</td>
+                    <td>Continuous hypersonic dash</td>
+                  </tr>
+                  <tr>
+                    <td class="tdb">Exo-Atmospheric (120k+ ft)</td>
+                    <td>Integrated Rocket Augmenter</td>
+                    <td>455 s</td>
+                    <td>Sub-orbital pop-up maneuvers</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <!-- INTERACTIVE FLIGHT ENVELOPE CHART -->
+            <div class="flight-envelope-widget">
+              <div class="envelope-header">
+                <div>
+                  <div class="envelope-title">Interactive Hypersonic Flight Corridor</div>
+                  <div class="envelope-subtitle">Move mouse over the canvas to calculate real-time dynamic pressure (q) and stagnation temperature</div>
+                </div>
+                <span class="vtag">Mach 0–8 / 150k ft</span>
+              </div>
+              <div class="envelope-canvas-wrap">
+                <canvas id="envelope-canvas"></canvas>
+              </div>
+              <div class="envelope-telemetry-bar">
+                <div class="envelope-telemetry-item">
+                  <div class="envelope-tel-label">Velocity</div>
+                  <div class="envelope-tel-val" id="tel-mach">Mach 7.0 (8,575 km/h)</div>
+                </div>
+                <div class="envelope-telemetry-item">
+                  <div class="envelope-tel-label">Altitude</div>
+                  <div class="envelope-tel-val" id="tel-alt">110,000 ft (33.5 km)</div>
+                </div>
+                <div class="envelope-telemetry-item">
+                  <div class="envelope-tel-label">Dynamic Pressure (q)</div>
+                  <div class="envelope-tel-val" id="tel-q">37.7 kPa</div>
+                </div>
+                <div class="envelope-telemetry-item">
+                  <div class="envelope-tel-label">Stagnation Temp</div>
+                  <div class="envelope-tel-val" id="tel-temp">1,840 °C</div>
+                </div>
+              </div>
+            </div>
           </div>
 
-          <!-- AEROSPACE FORMULA CARD -->
-          <div class="math-card">
-            <div class="math-header">
-              <span>Thermodynamic Cycle</span>
-              <span>Chapman-Jouguet Detonation Velocity</span>
+          <div class="mono-tab-panel" data-panel="chemistry">
+            <h3>Fuel Chemistry &amp; Propellant Storage</h3>
+            <div class="spec-grid">
+              <div class="spec-card">
+                <div class="spec-label">Primary Liquid Fuel</div>
+                <div class="spec-val">JP-10 / Synthetic Jet-A</div>
+              </div>
+              <div class="spec-card">
+                <div class="spec-label">Detonation Enhancer</div>
+                <div class="spec-val">Cryogenic Liquid Methane</div>
+              </div>
+              <div class="spec-card">
+                <div class="spec-label">Exo Oxidizer</div>
+                <div class="spec-val">High-Test Peroxide (HTP)</div>
+              </div>
             </div>
-            <div class="math-equation">
-              D_CJ = √[ 2 · (γ² - 1) · q_R ]
-            </div>
-            <div class="math-legend">
-              Calculates continuous supersonic detonation front velocity across the annular combustor ring, providing 22% higher thermal efficiency over conventional Brayton cycles.
-            </div>
+            <p>Endothermic hydrocarbon fuels absorb aerothermal heat from the combustion chamber walls prior to injection, cracking into reactive radicals that accelerate detonation wave propagation.</p>
           </div>
 
-          <h3>Flight Envelope Stage Breakdown</h3>
-          <div class="table-wrap">
-            <table>
-              <thead>
-                <tr>
-                  <th>Flight Regime</th>
-                  <th>Operating Architecture</th>
-                  <th>Specific Impulse (Isp)</th>
-                  <th>Primary Function</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td class="tdb">Subsonic – Mach 1.5</td>
-                  <td>Adaptive High-Bypass Turbofan</td>
-                  <td>3,800 s</td>
-                  <td>Runway launch, loiter &amp; cruise</td>
-                </tr>
-                <tr>
-                  <td class="tdb">Mach 1.5 – Mach 3.5</td>
-                  <td>Subsonic-Combustion Ramjet</td>
-                  <td>2,200 s</td>
-                  <td>Supersonic acceleration</td>
-                </tr>
-                <tr>
-                  <td class="tdb">Mach 3.5 – Mach 8.0</td>
-                  <td>Dual-Mode RDRE + Scramjet</td>
-                  <td>1,650 s</td>
-                  <td>Continuous hypersonic dash</td>
-                </tr>
-                <tr>
-                  <td class="tdb">Exo-Atmospheric (120k+ ft)</td>
-                  <td>Integrated Rocket Augmenter</td>
-                  <td>455 s</td>
-                  <td>Sub-orbital pop-up maneuvers</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-
-          <!-- INTERACTIVE FLIGHT ENVELOPE CHART -->
-          <div class="flight-envelope-widget">
-            <div class="envelope-header">
-              <div>
-                <div class="envelope-title">Interactive Hypersonic Flight Corridor</div>
-                <div class="envelope-subtitle">Move mouse over the canvas to calculate real-time dynamic pressure (q) and stagnation temperature</div>
-              </div>
-              <span class="vtag">Mach 0–8 / 150k ft</span>
-            </div>
-            <div class="envelope-canvas-wrap">
-              <canvas id="envelope-canvas"></canvas>
-            </div>
-            <div class="envelope-telemetry-bar">
-              <div class="envelope-telemetry-item">
-                <div class="envelope-tel-label">Velocity</div>
-                <div class="envelope-tel-val" id="tel-mach">Mach 7.0 (8,575 km/h)</div>
-              </div>
-              <div class="envelope-telemetry-item">
-                <div class="envelope-tel-label">Altitude</div>
-                <div class="envelope-tel-val" id="tel-alt">110,000 ft (33.5 km)</div>
-              </div>
-              <div class="envelope-telemetry-item">
-                <div class="envelope-tel-label">Dynamic Pressure (q)</div>
-                <div class="envelope-tel-val" id="tel-q">37.7 kPa</div>
-              </div>
-              <div class="envelope-telemetry-item">
-                <div class="envelope-tel-label">Stagnation Temp</div>
-                <div class="envelope-tel-val" id="tel-temp">1,840 °C</div>
-              </div>
-            </div>
-          </div>
-
-          <div class="divider reveal"></div>
-          <h3>Thermal Protection &amp; Regenerative Cooling</h3>
-          <ul class="doc-list">
-            <li>Nano-porous Ceramic Matrix Composites (CMC) rated to 2,200°C shock stagnation.</li>
-            <li>Fuel-regenerative active cooling grid circulating endothermic hydrocarbon fuels along the leading edges.</li>
-            <li>MHD (Magnetohydrodynamic) energy bypass for boundary layer flow stabilization.</li>
-          </ul>
-
-          <h3>Fuel Chemistry &amp; Propellant Storage</h3>
-          <div class="spec-grid">
-            <div class="spec-card">
-              <div class="spec-label">Primary Liquid Fuel</div>
-              <div class="spec-val">JP-10 / Synthetic Jet-A</div>
-            </div>
-            <div class="spec-card">
-              <div class="spec-label">Detonation Enhancer</div>
-              <div class="spec-val">Cryogenic Liquid Methane</div>
-            </div>
-            <div class="spec-card">
-              <div class="spec-label">Exo Oxidizer</div>
-              <div class="spec-val">High-Test Peroxide (HTP)</div>
-            </div>
+          <div class="mono-tab-panel" data-panel="thermal">
+            <h3>Thermal Protection &amp; Regenerative Cooling</h3>
+            <ul class="doc-list">
+              <li>Nano-porous Ceramic Matrix Composites (CMC) rated to 2,200°C shock stagnation.</li>
+              <li>Fuel-regenerative active cooling grid circulating endothermic hydrocarbon fuels along the leading edges.</li>
+              <li>MHD (Magnetohydrodynamic) energy bypass for boundary layer flow stabilization.</li>
+            </ul>
           </div>
 
           <div class="sec-footer">
@@ -1030,7 +1059,7 @@
           </div>
 
           <div class="sec-footer">
-            <button class="fnav-btn" onclick="show('missions')">← Mission Profiles</button>
+            <button class="export-spec-btn" onclick="document.getElementById('headerExportBtn').click()">📋 Export JSON Spec</button>
             <button class="fnav-btn" onclick="show('overview')">Back to Monograph Overview →</button>
           </div>
         </div>
@@ -1074,6 +1103,21 @@
         </div>
         <span>Level-6 Defense Knowledge Base</span>
       </div>
+    </div>
+  </div>
+
+  <!-- JSON SPEC EXPORT MODAL -->
+  <div id="json-export-modal" role="dialog" aria-modal="true" aria-label="Machine-Readable Defense Specification">
+    <div class="json-modal-box">
+      <div class="json-modal-header">
+        <span>DECKY-CAP-DEFENSE-SPEC-v2.0.json</span>
+        <div class="json-modal-actions">
+          <button class="lb-btn" id="json-copy-btn">📋 Copy JSON</button>
+          <button class="lb-btn" id="json-dl-btn">⬇ Download .json</button>
+          <button class="lb-btn" id="json-close-btn">✕ Close</button>
+        </div>
+      </div>
+      <pre class="json-code-view"><code id="json-code-output"></code></pre>
     </div>
   </div>
 

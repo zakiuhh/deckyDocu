@@ -1,6 +1,6 @@
 /* ==========================================================================
    DECKY CAP — Option B: Technical Monograph & Aerospace Paper Engine
-   Interactive Telemetry · Deep Linking · Lightbox · Hotspots · Flight Envelope
+   Interactive Telemetry · Deep Linking · Lightbox · Hotspots · Audio Engine
    ========================================================================== */
 
 const sectionMap = {
@@ -51,6 +51,7 @@ const SEARCH_INDEX = [
   { id: "compat", category: "missions", icon: "🚢", title: "Naval & Ground VLS Launch Integration", desc: "Mark 41 / 57 VLS canister deployment and containerized RATO." },
   // Quick Actions
   { action: "theme", category: "actions", icon: "🌗", title: "Toggle Monograph Theme", desc: "Switch between Light Whitepaper and Dark Carbon Monograph." },
+  { action: "export", category: "actions", icon: "📄", title: "Export Machine-Readable Spec", desc: "View and copy standardized JSON defense specifications." },
   { action: "lightbox", category: "actions", icon: "🔍", title: "Open Blueprint Inspector", desc: "Inspect current section schematic in high-res lightbox." },
   { action: "invert", category: "actions", icon: "💡", title: "Invert Blueprint Schematic", desc: "Toggle inverted night-vision schematic contrast filter." }
 ];
@@ -142,10 +143,70 @@ const BLUEPRINT_HOTSPOTS = {
   ]
 };
 
+// ── Synthetic Tactical Audio Feedback Engine ──────────
+let audioCtx = null;
+let isAudioMuted = localStorage.getItem("tacticalAudio") === "0";
+
+function playTacticalSound(type = "click") {
+  if (isAudioMuted) return;
+  try {
+    if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    if (audioCtx.state === "suspended") audioCtx.resume();
+
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+
+    const now = audioCtx.currentTime;
+    if (type === "click") {
+      osc.type = "sine";
+      osc.frequency.setValueAtTime(1200, now);
+      osc.frequency.exponentialRampToValueAtTime(300, now + 0.035);
+      gain.gain.setValueAtTime(0.04, now);
+      gain.gain.linearRampToValueAtTime(0.001, now + 0.035);
+      osc.start(now);
+      osc.stop(now + 0.035);
+    } else if (type === "hum") {
+      osc.type = "triangle";
+      osc.frequency.setValueAtTime(140, now);
+      osc.frequency.linearRampToValueAtTime(220, now + 0.08);
+      gain.gain.setValueAtTime(0.03, now);
+      gain.gain.linearRampToValueAtTime(0.001, now + 0.08);
+      osc.start(now);
+      osc.stop(now + 0.08);
+    }
+  } catch (e) {
+    // Audio context may be restricted before user gesture
+  }
+}
+
+function initAudioToggle() {
+  const btn = document.getElementById("audioToggle");
+  const label = document.getElementById("audioLabel");
+  if (!btn || !label) return;
+
+  function updateAudioUI() {
+    label.textContent = isAudioMuted ? "Audio: Muted" : "Tactical Audio: Active";
+    btn.style.borderColor = isAudioMuted ? "var(--border)" : "var(--accent)";
+  }
+
+  btn.addEventListener("click", () => {
+    isAudioMuted = !isAudioMuted;
+    localStorage.setItem("tacticalAudio", isAudioMuted ? "0" : "1");
+    updateAudioUI();
+    if (!isAudioMuted) playTacticalSound("hum");
+  });
+
+  updateAudioUI();
+}
+
 // ── Section Switching & URL Hash Deep-Linking ─────────
 function show(key, updateHash = true) {
   const targetId = sectionMap[key];
   if (!targetId) return;
+
+  playTacticalSound("click");
 
   document.querySelectorAll(".section").forEach((s) => s.classList.remove("active"));
   const target = document.getElementById(targetId);
@@ -213,10 +274,8 @@ function initBlueprintHotspots() {
     if (!bpContainer || bpContainer.dataset.hotspotized) return;
     bpContainer.dataset.hotspotized = "true";
 
-    // Wrap in relative container
     bpContainer.classList.add("blueprint-hotspot-container");
 
-    // Callout popup card
     let callout = bpContainer.querySelector(".hotspot-callout-card");
     if (!callout) {
       callout = document.createElement("div");
@@ -233,6 +292,7 @@ function initBlueprintHotspots() {
 
       pin.addEventListener("mouseenter", (e) => {
         e.stopPropagation();
+        playTacticalSound("click");
         pin.classList.add("active");
         callout.innerHTML = `
           <div class="hotspot-card-header">
@@ -285,7 +345,6 @@ function initFlightEnvelopeCanvas() {
   const chartW = w - padLeft - padRight;
   const chartH = h - padTop - padBottom;
 
-  // Clear
   ctx.clearRect(0, 0, w, h);
 
   const isDark = document.body.classList.contains("dark-theme");
@@ -293,13 +352,11 @@ function initFlightEnvelopeCanvas() {
   const gridColor = isDark ? "rgba(255,255,255,0.06)" : "rgba(15,23,42,0.06)";
   const accentColor = isDark ? "#38bdf8" : "#0284c7";
 
-  // Grid Lines
   ctx.lineWidth = 1;
   ctx.strokeStyle = gridColor;
   ctx.fillStyle = textColor;
   ctx.font = "10px Fira Code, monospace";
 
-  // X Axis (Mach 0 to 8)
   for (let m = 0; m <= 8; m += 1) {
     const x = padLeft + (m / 8) * chartW;
     ctx.beginPath();
@@ -310,7 +367,6 @@ function initFlightEnvelopeCanvas() {
     ctx.fillText(`M${m}`, x, padTop + chartH + 18);
   }
 
-  // Y Axis (Altitude 0 to 150k ft)
   for (let alt = 0; alt <= 150; alt += 30) {
     const y = padTop + chartH - (alt / 150) * chartH;
     ctx.beginPath();
@@ -321,7 +377,6 @@ function initFlightEnvelopeCanvas() {
     ctx.fillText(`${alt}k ft`, padLeft - 8, y + 3);
   }
 
-  // Flight Corridor Polygon: Turbofan -> Ramjet -> RDRE/Scramjet -> Exo Rocket
   const envelopePoints = [
     { m: 0.2, alt: 0 },
     { m: 0.8, alt: 35 },
@@ -356,7 +411,6 @@ function initFlightEnvelopeCanvas() {
   ctx.lineWidth = 2;
   ctx.stroke();
 
-  // Stage Boundary Badges
   ctx.font = "9px Fira Code, monospace";
   ctx.fillStyle = isDark ? "#38bdf8" : "#0284c7";
   ctx.textAlign = "left";
@@ -365,7 +419,6 @@ function initFlightEnvelopeCanvas() {
   ctx.fillText("Stage 3: RDRE + Scramjet Corridor", padLeft + (4.2 / 8) * chartW, padTop + chartH - (95 / 150) * chartH);
   ctx.fillText("Stage 4: Exo-Rocket (150k ft)", padLeft + (6.2 / 8) * chartW, padTop + chartH - (142 / 150) * chartH);
 
-  // Mouse Interaction on Canvas
   canvas.onmousemove = (e) => {
     const cRect = canvas.getBoundingClientRect();
     const mx = e.clientX - cRect.left;
@@ -375,7 +428,6 @@ function initFlightEnvelopeCanvas() {
       const calcMach = ((mx - padLeft) / chartW) * 8;
       const calcAlt = ((padTop + chartH - my) / chartH) * 150;
 
-      // Re-render chart + cursor crosshair
       initFlightEnvelopeCanvas();
 
       ctx.save();
@@ -394,9 +446,8 @@ function initFlightEnvelopeCanvas() {
       ctx.stroke();
       ctx.restore();
 
-      // Dynamic Math Computation: Dynamic Pressure q (kPa) & Stagnation Temp T0 (K)
       const altitudeMeters = calcAlt * 304.8;
-      const rho = 1.225 * Math.exp(-altitudeMeters / 7400); // Standard atmospheric approximation
+      const rho = 1.225 * Math.exp(-altitudeMeters / 7400);
       const speedOfSound = 340.29 * Math.sqrt(Math.max(216.65, 288.15 - 0.0065 * altitudeMeters) / 288.15);
       const velocityMs = calcMach * speedOfSound;
       const dynamicPressureKPa = (0.5 * rho * velocityMs * velocityMs) / 1000;
@@ -422,6 +473,7 @@ function initComparisonMatrix() {
 
   filterBtns.forEach((btn) => {
     btn.addEventListener("click", () => {
+      playTacticalSound("click");
       filterBtns.forEach((b) => b.classList.remove("active"));
       btn.classList.add("active");
       const category = btn.dataset.compareFilter;
@@ -483,6 +535,7 @@ function initValkyrieConfigurator() {
 
   missionBtns.forEach((btn) => {
     btn.addEventListener("click", () => {
+      playTacticalSound("click");
       missionBtns.forEach((b) => b.classList.remove("active"));
       btn.classList.add("active");
       currentMission = btn.dataset.mission;
@@ -492,6 +545,7 @@ function initValkyrieConfigurator() {
 
   warheadBtns.forEach((btn) => {
     btn.addEventListener("click", () => {
+      playTacticalSound("click");
       warheadBtns.forEach((b) => b.classList.remove("active"));
       btn.classList.add("active");
       currentWarhead = btn.dataset.warhead;
@@ -500,6 +554,124 @@ function initValkyrieConfigurator() {
   });
 
   updateConfigMetrics();
+}
+
+// ── Monograph Subsystem Tabs Engine ────────────────────
+function initMonographTabs() {
+  document.querySelectorAll(".monograph-tabs").forEach((tabGroup) => {
+    const buttons = tabGroup.querySelectorAll(".mono-tab-btn");
+    buttons.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        playTacticalSound("click");
+        const targetTab = btn.dataset.tab;
+        const parent = btn.closest(".section");
+        if (!parent) return;
+
+        buttons.forEach((b) => b.classList.remove("active"));
+        btn.classList.add("active");
+
+        parent.querySelectorAll(".mono-tab-panel").forEach((panel) => {
+          panel.classList.toggle("active", panel.dataset.panel === targetTab);
+        });
+      });
+    });
+  });
+}
+
+// ── JSON Machine-Readable Spec Exporter ────────────────
+function initSpecExporter() {
+  const modal = document.getElementById("json-export-modal");
+  const openBtns = document.querySelectorAll(".export-spec-btn");
+  const closeBtn = document.getElementById("json-close-btn");
+  const copyBtn = document.getElementById("json-copy-btn");
+  const dlBtn = document.getElementById("json-dl-btn");
+  const codeView = document.getElementById("json-code-output");
+
+  if (!modal || !codeView) return;
+
+  const DEFENSE_SPEC_DATA = {
+    $schema: "https://defense.mil-spec.org/schemas/ucav/v2.0.json",
+    platform: {
+      designation: "DECKY CAP (UCAV)",
+      type: "Sixth-Generation Autonomous Combat Air Vehicle",
+      classification: "LEVEL-6 MONOGRAPH // UNCLASSIFIED FOR RESEARCH",
+      authors: ["Umar Khattab Malik", "Zaki Ul Hassan"],
+      year: 2026,
+      version: "2.0-spec"
+    },
+    aerodynamics: {
+      airframe: "Chameleon-Wing Continuous Curvature Blended Wing-Body",
+      frontal_rcs_dbsm: -40.0,
+      frontal_rcs_m2: 0.0001,
+      peak_operating_ceiling_ft: 150000,
+      max_mach: 8.0
+    },
+    propulsion: {
+      engine: "XH-800 Hydra Multi-Mode Combined Cycle",
+      stages: [
+        { regime: "Subsonic - Mach 1.5", architecture: "Adaptive High-Bypass Turbofan", isp_sec: 3800 },
+        { regime: "Mach 1.5 - 3.5", architecture: "Subsonic-Combustion Ramjet", isp_sec: 2200 },
+        { regime: "Mach 3.5 - 8.0", architecture: "Dual-Mode RDRE + Scramjet", isp_sec: 1650 },
+        { regime: "Exo-Atmospheric (120k+ ft)", architecture: "Integrated Rocket Augmenter", isp_sec: 455 }
+      ],
+      primary_fuels: ["JP-10", "Synthetic Jet-A", "Cryogenic Liquid Methane"]
+    },
+    armament: {
+      missile: "VALKYRIE-X AI-Linked Hypersonic Kinetic Interceptor",
+      terminal_speed_mach: 6.5,
+      effective_range_km: 280,
+      kinetic_energy_yield_mj: 207.5,
+      directed_energy: "65kW Optically Phased Fiber Laser Turret + HPM Horn"
+    },
+    avionics_and_c2: {
+      fire_control: "HCFS-X Neuromorphic AI Combat Coordinator",
+      radar: "MURAD++ 360-deg Gallium Nitride (GaN) AESA",
+      datalink: "Photonic Quantum Key Distribution (PQC Kyber/Dilithium)",
+      cyber_resilience: "Tri-Tier Optical Air-Gap Isolation with Tamper Zeroization"
+    }
+  };
+
+  const formattedJson = JSON.stringify(DEFENSE_SPEC_DATA, null, 2);
+
+  function openSpecModal() {
+    playTacticalSound("click");
+    codeView.textContent = formattedJson;
+    modal.classList.add("active");
+    document.body.style.overflow = "hidden";
+  }
+
+  function closeSpecModal() {
+    modal.classList.remove("active");
+    document.body.style.overflow = "";
+  }
+
+  openBtns.forEach((btn) => btn.addEventListener("click", openSpecModal));
+  if (closeBtn) closeBtn.onclick = closeSpecModal;
+
+  modal.addEventListener("click", (e) => {
+    if (e.target === modal) closeSpecModal();
+  });
+
+  if (copyBtn) {
+    copyBtn.onclick = () => {
+      navigator.clipboard.writeText(formattedJson).then(() => {
+        copyBtn.textContent = "✓ Copied to Clipboard";
+        setTimeout(() => (copyBtn.textContent = "📋 Copy JSON"), 2000);
+      });
+    };
+  }
+
+  if (dlBtn) {
+    dlBtn.onclick = () => {
+      const blob = new Blob([formattedJson], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "decky-cap-defense-spec-v2.0.json";
+      a.click();
+      URL.revokeObjectURL(url);
+    };
+  }
 }
 
 // ── Command Palette (Cmd+K) Engine ────────────────────
@@ -559,6 +731,7 @@ function initCommandPalette() {
 
   filterBtns.forEach((btn) => {
     btn.addEventListener("click", () => {
+      playTacticalSound("click");
       filterBtns.forEach((b) => b.classList.remove("active"));
       btn.classList.add("active");
       currentPaletteFilter = btn.dataset.filter;
@@ -639,6 +812,9 @@ function initCommandPalette() {
       show(item.id);
     } else if (item.action === "theme") {
       toggleTheme();
+    } else if (item.action === "export") {
+      const exportBtn = document.querySelector(".export-spec-btn");
+      if (exportBtn) exportBtn.click();
     } else if (item.action === "lightbox") {
       const activeSection = document.querySelector(".section.active");
       const bp = activeSection?.querySelector(".blueprint-img img");
@@ -753,6 +929,7 @@ function toggleSidebar() {
 
 // ── Dark / Light Theme Toggle ─────────────────────────
 function toggleTheme() {
+  playTacticalSound("hum");
   const isDark = document.body.classList.toggle("dark-theme");
   localStorage.setItem("theme", isDark ? "dark" : "light");
   updateThemeLabel(isDark);
@@ -787,6 +964,7 @@ function initBlueprintLightbox() {
 
     bp.addEventListener("click", (e) => {
       if (e.target.classList.contains("hotspot-pin") || e.target.closest(".hotspot-callout-card")) return;
+      playTacticalSound("click");
       if (lbImg) lbImg.src = img.src;
       if (lbTitle) lbTitle.textContent = img.alt || "DECKY CAP Technical Schematic";
       currentZoom = 1;
@@ -802,6 +980,7 @@ function initBlueprintLightbox() {
   const zoomIn = document.getElementById("lb-zoom-in");
   if (zoomIn) {
     zoomIn.onclick = () => {
+      playTacticalSound("click");
       currentZoom = Math.min(currentZoom + 0.25, 3);
       if (lbImg) lbImg.style.transform = `scale(${currentZoom})`;
     };
@@ -810,6 +989,7 @@ function initBlueprintLightbox() {
   const zoomOut = document.getElementById("lb-zoom-out");
   if (zoomOut) {
     zoomOut.onclick = () => {
+      playTacticalSound("click");
       currentZoom = Math.max(currentZoom - 0.25, 0.75);
       if (lbImg) lbImg.style.transform = `scale(${currentZoom})`;
     };
@@ -818,6 +998,7 @@ function initBlueprintLightbox() {
   const invertBtn = document.getElementById("lb-invert");
   if (invertBtn) {
     invertBtn.onclick = () => {
+      playTacticalSound("click");
       if (lbImg) lbImg.classList.toggle("invert-blueprint");
     };
   }
@@ -854,7 +1035,7 @@ function initAcronymTooltips() {
   }
 
   document.querySelectorAll("p, td, li, .callout p, .mc-desc").forEach((node) => {
-    if (node.dataset.acronymized || node.closest(".hotspot-callout-card") || node.closest(".cmd-palette-container")) return;
+    if (node.dataset.acronymized || node.closest(".hotspot-callout-card") || node.closest(".cmd-palette-container") || node.closest("#json-export-modal")) return;
     node.dataset.acronymized = "true";
 
     let html = node.innerHTML;
@@ -941,8 +1122,8 @@ function initCustomCursor() {
   requestAnimationFrame(renderCursor);
 
   document.body.addEventListener("mouseover", (e) => {
-    const magneticEl = e.target.closest(".spec-card, .module-card, .mission-card, .cmd-result-item, .config-btn, .compare-filter-btn");
-    const clickableEl = e.target.closest("a, .nav-item, .fnav-btn, .sb-toggle, .theme-btn, .blueprint-img, .acronym-tag, .search-trigger, .cmd-filter-btn, .hotspot-pin");
+    const magneticEl = e.target.closest(".spec-card, .module-card, .mission-card, .cmd-result-item, .config-btn, .compare-filter-btn, .mono-tab-btn");
+    const clickableEl = e.target.closest("a, .nav-item, .fnav-btn, .sb-toggle, .theme-btn, .blueprint-img, .acronym-tag, .search-trigger, .cmd-filter-btn, .hotspot-pin, .export-spec-btn, .audio-btn");
     if (magneticEl) {
       hoverTarget = magneticEl;
       cursor.classList.add("magnetic");
@@ -955,8 +1136,8 @@ function initCustomCursor() {
   });
 
   document.body.addEventListener("mouseout", (e) => {
-    const magneticEl = e.target.closest(".spec-card, .module-card, .mission-card, .cmd-result-item, .config-btn, .compare-filter-btn");
-    const clickableEl = e.target.closest("a, .nav-item, .fnav-btn, .sb-toggle, .theme-btn, .blueprint-img, .acronym-tag, .search-trigger, .cmd-filter-btn, .hotspot-pin");
+    const magneticEl = e.target.closest(".spec-card, .module-card, .mission-card, .cmd-result-item, .config-btn, .compare-filter-btn, .mono-tab-btn");
+    const clickableEl = e.target.closest("a, .nav-item, .fnav-btn, .sb-toggle, .theme-btn, .blueprint-img, .acronym-tag, .search-trigger, .cmd-filter-btn, .hotspot-pin, .export-spec-btn, .audio-btn");
     if (magneticEl || clickableEl) {
       hoverTarget = null;
       cursor.classList.remove("magnetic", "hover");
@@ -1022,6 +1203,9 @@ document.addEventListener("DOMContentLoaded", () => {
   initFlightEnvelopeCanvas();
   initComparisonMatrix();
   initValkyrieConfigurator();
+  initMonographTabs();
+  initSpecExporter();
+  initAudioToggle();
 
   window.addEventListener("resize", () => {
     initFlightEnvelopeCanvas();
