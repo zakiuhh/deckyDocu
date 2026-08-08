@@ -11,6 +11,15 @@
   padding: 0;
 }
 
+/* ── Inktrap Typography Definition ── */
+@font-face {
+  font-family: 'Malinton Display';
+  font-style: normal;
+  font-weight: 400 800;
+  font-display: swap;
+  src: local('Malinton Display'), local('MalintonDisplay'), local('Malinton-Display'), local('Malinton'), local('Malinton Bold');
+}
+
 :root {
   /* ── Option B: Monograph Light (Default / Whitepaper) ── */
   --bg: #fbfbf9;
@@ -38,8 +47,9 @@
   --card-shadow-hover: 0 12px 32px -4px rgba(2, 132, 199, 0.12), 0 0 0 1px rgba(2, 132, 199, 0.25);
   --grid-dot: rgba(15, 23, 42, 0.045);
 
-  /* ── Typography ── */
-  --font-serif: 'Newsreader', Georgia, 'Times New Roman', serif;
+  /* ── Typography (Inktrap Aerospace Monograph) ── */
+  --font-heading: 'Malinton Display', 'Malinton', 'Plus Jakarta Sans', 'Space Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-serif: 'Malinton Display', 'Malinton', 'Plus Jakarta Sans', 'Space Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
   --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   --font-mono: 'Fira Code', 'JetBrains Mono', Consolas, monospace;
 
@@ -125,6 +135,36 @@ body {
 a {
   text-decoration: none;
   color: inherit;
+}
+
+/* ── Responsive Lucide Icons ── */
+.lucide-icon {
+  width: 14px;
+  height: 14px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  display: inline-block;
+  vertical-align: middle;
+  flex-shrink: 0;
+  transition: transform var(--transition-fast), stroke var(--transition-fast);
+}
+
+.lucide-icon-sm {
+  width: 12px;
+  height: 12px;
+}
+
+.lucide-icon-md {
+  width: 16px;
+  height: 16px;
+}
+
+.lucide-icon-lg {
+  width: 18px;
+  height: 18px;
 }
 
 /* ── Reading Progress Bar ── */
@@ -1123,11 +1163,23 @@ p {
   font-size: 11px;
   cursor: pointer;
   transition: var(--transition-fast);
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
 }
 
 .lb-btn:hover {
   background: var(--accent);
   color: #0f172a;
+  border-color: var(--accent);
+}
+
+.lb-btn.active {
+  background: var(--accent);
+  color: #0f172a;
+  border-color: var(--accent);
+  font-weight: 600;
+  box-shadow: 0 0 12px rgba(2, 132, 199, 0.4);
 }
 
 .lightbox-viewport {
@@ -1138,6 +1190,17 @@ p {
   overflow: hidden;
   position: relative;
   padding: var(--space-6);
+  cursor: default;
+  user-select: none;
+  touch-action: none;
+}
+
+.lightbox-viewport.pan-enabled {
+  cursor: grab;
+}
+
+.lightbox-viewport.is-panning {
+  cursor: grabbing !important;
 }
 
 .lightbox-viewport img {
@@ -1147,7 +1210,11 @@ p {
   border-radius: var(--radius-md);
   border: 1px solid rgba(255, 255, 255, 0.15);
   box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7);
-  transition: transform 0.2s ease, filter 0.3s ease;
+  transition: filter 0.3s ease;
+  will-change: transform;
+  transform-origin: center center;
+  user-select: none;
+  -webkit-user-drag: none;
 }
 
 .lightbox-viewport img.invert-blueprint {

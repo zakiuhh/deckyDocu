@@ -18,7 +18,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link
-    href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Inter:wght@300;400;500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,400;1,6..72,600&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Inter:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:ital,wght@0,500;0,600;0,700;0,800;1,600;1,700&family=Space+Grotesk:wght@500;600;700&display=swap"
     rel="stylesheet" />
 
   <link rel="stylesheet" href="style.css" />
@@ -239,7 +239,10 @@
           </div>
 
           <div class="sec-footer">
-            <button class="export-spec-btn" onclick="document.getElementById('headerExportBtn').click()">📋 Export JSON Spec</button>
+            <button class="export-spec-btn" onclick="document.getElementById('headerExportBtn').click()">
+              <svg class="lucide-icon" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+              <span>Export JSON Spec</span>
+            </button>
             <button class="fnav-btn" onclick="show('propulsion')">Section 01: Propulsion System →</button>
           </div>
         </div>
@@ -866,7 +869,10 @@
           </div>
 
           <div class="sec-footer">
-            <button class="export-spec-btn" onclick="document.getElementById('headerExportBtn').click()">📋 Export JSON Spec</button>
+            <button class="export-spec-btn" onclick="document.getElementById('headerExportBtn').click()">
+              <svg class="lucide-icon" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+              <span>Export JSON Spec</span>
+            </button>
             <button class="fnav-btn" onclick="show('overview')">Back to Monograph Overview →</button>
           </div>
         </div>
@@ -919,9 +925,18 @@
       <div class="json-modal-header">
         <span>DECKY-CAP-DEFENSE-SPEC-v2.0.json</span>
         <div class="json-modal-actions">
-          <button class="lb-btn" id="json-copy-btn">📋 Copy JSON</button>
-          <button class="lb-btn" id="json-dl-btn">⬇ Download .json</button>
-          <button class="lb-btn" id="json-close-btn">✕ Close</button>
+          <button class="lb-btn" id="json-copy-btn">
+            <svg class="lucide-icon" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            <span>Copy JSON</span>
+          </button>
+          <button class="lb-btn" id="json-dl-btn">
+            <svg class="lucide-icon" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            <span>Download .json</span>
+          </button>
+          <button class="lb-btn" id="json-close-btn">
+            <svg class="lucide-icon" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            <span>Close</span>
+          </button>
         </div>
       </div>
       <pre class="json-code-view"><code id="json-code-output"></code></pre>
@@ -932,14 +947,32 @@
   <div id="blueprint-lightbox" role="dialog" aria-modal="true" aria-label="Technical Schematic Lightbox">
     <div class="lightbox-header">
       <div class="lightbox-title">
-        <span>🔍</span>
+        <svg class="lucide-icon lucide-icon-md" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
         <span id="lightbox-title-text">DECKY CAP Technical Schematic</span>
       </div>
       <div class="lightbox-controls">
-        <button class="lb-btn" id="lb-invert" title="Toggle Inverted Blueprint Mode">Invert Colors</button>
-        <button class="lb-btn" id="lb-zoom-in" title="Zoom In">+</button>
-        <button class="lb-btn" id="lb-zoom-out" title="Zoom Out">-</button>
-        <button class="lb-btn" id="lb-close" title="Close Lightbox (Esc)">✕ Close</button>
+        <button class="lb-btn" id="lb-pan" title="Toggle Hand / Pan Tool for moving inside schematic">
+          <svg class="lucide-icon" viewBox="0 0 24 24"><path d="M18 11V6a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v0"/><path d="M14 10V4a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v2"/><path d="M10 10.5V6a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v8"/><path d="M18 8a2 2 0 1 1 4 0v6a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.86-5.99-2.34l-3.6-3.6a2 2 0 0 1 2.83-2.82L7 15"/></svg>
+          <span>Hand Tool</span>
+        </button>
+        <button class="lb-btn" id="lb-invert" title="Toggle Inverted Blueprint Mode">
+          <svg class="lucide-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 18a6 6 0 0 0 0-12v12z"/></svg>
+          <span>Invert Colors</span>
+        </button>
+        <button class="lb-btn" id="lb-zoom-in" title="Zoom In (+)">
+          <svg class="lucide-icon" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        </button>
+        <button class="lb-btn" id="lb-zoom-out" title="Zoom Out (-)">
+          <svg class="lucide-icon" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        </button>
+        <button class="lb-btn" id="lb-reset" title="Reset View &amp; Position (0)">
+          <svg class="lucide-icon" viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+          <span>Reset</span>
+        </button>
+        <button class="lb-btn" id="lb-close" title="Close Lightbox (Esc)">
+          <svg class="lucide-icon" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          <span>Close</span>
+        </button>
       </div>
     </div>
     <div class="lightbox-viewport">
@@ -949,7 +982,7 @@
 
   <!-- TACTICAL TOAST NOTIFICATION -->
   <div id="tactical-toast" role="status" aria-live="polite">
-    <span class="toast-icon">✓</span>
+    <svg class="lucide-icon toast-icon" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
     <span id="toast-message">Deep Link Copied</span>
     <span class="toast-url" id="toast-url"></span>
   </div>
