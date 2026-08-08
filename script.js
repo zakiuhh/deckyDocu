@@ -1,6 +1,6 @@
 /* ==========================================================================
    DECKY CAP — Option B: Technical Monograph & Aerospace Paper Engine
-   Interactive Telemetry · Deep Linking · Lightbox · Hotspots · Audio Engine
+   Interactive Telemetry · Deep Linking · Lightbox · Monograph Tabs · Audio
    ========================================================================== */
 
 const sectionMap = {
@@ -115,34 +115,6 @@ const ACRONYM_REGISTRY = {
   }
 };
 
-// ── Blueprint Hotspot Coordinates & Metadata ──────────
-const BLUEPRINT_HOTSPOTS = {
-  "sec-overview": [
-    { top: 22, left: 48, title: "MURAD++ GaN Nose Radome", tag: "Sensor Hub", desc: "Wideband GaN AESA with subterranean and sea-surface multi-mode tracking." },
-    { top: 48, left: 32, title: "Conformal Internal Bay", tag: "Kinetic Bay", desc: "Flush rotary launcher housing 4x VALKYRIE-X hypersonic missiles." },
-    { top: 58, left: 74, title: "Combined-Cycle Hypersonic Core", tag: "Propulsion", desc: "XH-800 Hydra combined turbofan, RDRE, and scramjet propulsion channels." },
-    { top: 38, left: 82, title: "Chameleon-Wing Leading Edge", tag: "Aero/Stealth", desc: "Nano-ceramic continuous curvature edge with dynamic thermal dissipation." }
-  ],
-  "sec-propulsion": [
-    { top: 35, left: 24, title: "Variable Compression Inlet", tag: "Aerodynamics", desc: "Active ramp geometry tailoring shockwave angle from Mach 1.5 to 8.0." },
-    { top: 52, left: 52, title: "Annular RDRE Detonation Ring", tag: "Combustion", desc: "Continuous rotating detonation front delivering peak pressure-gain thrust." },
-    { top: 62, left: 78, title: "Exo-Atmospheric Aerospike Bell", tag: "Rocket Module", desc: "Self-compensating altitude aerospike nozzle for high-altitude pop-up dashes." }
-  ],
-  "sec-stealth": [
-    { top: 40, left: 30, title: "NanoIronCloak Dipole Layer", tag: "RAM Surface", desc: "Frequency-selective microwave absorption converting RF pulses to thermal micro-diffusion." },
-    { top: 60, left: 65, title: "Active Coherent Wave Nullifier", tag: "Counter-RF", desc: "Emits 180° inverted phase waveforms canceling residual ground radar echoes." }
-  ],
-  "sec-control": [
-    { top: 32, left: 45, title: "Edge Neuromorphic Core", tag: "AI Matrix", desc: "Sub-millisecond sensor fusion processing 12.8 TFLOPS of battlespace telemetry." },
-    { top: 55, left: 70, title: "65kW Phased Laser Turret", tag: "Directed Energy", desc: "Solid-state fiber laser delivering instantaneous point-defense against AAMs." }
-  ],
-  "sec-missile": [
-    { top: 30, left: 25, title: "Tri-Mode Millimeter Seeker", tag: "Guidance", desc: "Combines active AESA radar, imaging infrared (IIR), and optical scene matching." },
-    { top: 50, left: 55, title: "Kinetic-EMP Multi-Warhead", tag: "Warhead", desc: "Selectable shaped kinetic penetrator or high-intensity EMP pulse module." },
-    { top: 68, left: 80, title: "Grid Fin Aerodynamic Actuators", tag: "Flight Control", desc: "High-angle-of-attack grid control surfaces enabling 60G terminal intercept maneuvers." }
-  ]
-};
-
 // ── Synthetic Tactical Audio Feedback Engine ──────────
 let audioCtx = null;
 let isAudioMuted = localStorage.getItem("tacticalAudio") === "0";
@@ -177,7 +149,7 @@ function playTacticalSound(type = "click") {
       osc.stop(now + 0.08);
     }
   } catch (e) {
-    // Audio context may be restricted before user gesture
+    // Audio context restricted prior to user interaction
   }
 }
 
@@ -226,10 +198,6 @@ function show(key, updateHash = true) {
   applyAnimations(target);
   buildSubTOC(target);
 
-  if (key === "overview" || key === "propulsion") {
-    setTimeout(initFlightEnvelopeCanvas, 100);
-  }
-
   if (updateHash && window.location.hash !== `#${key}`) {
     history.pushState({ section: key }, `DECKY CAP - ${key}`, `#${key}`);
   }
@@ -262,299 +230,6 @@ window.addEventListener("popstate", (e) => {
     show("overview", false);
   }
 });
-
-// ── Interactive Hotspot Blueprint Overlay System ──────
-function initBlueprintHotspots() {
-  document.querySelectorAll(".section").forEach((section) => {
-    const secId = section.id;
-    const hotspots = BLUEPRINT_HOTSPOTS[secId];
-    if (!hotspots || hotspots.length === 0) return;
-
-    const bpContainer = section.querySelector(".blueprint-img");
-    if (!bpContainer || bpContainer.dataset.hotspotized) return;
-    bpContainer.dataset.hotspotized = "true";
-
-    bpContainer.classList.add("blueprint-hotspot-container");
-
-    let callout = bpContainer.querySelector(".hotspot-callout-card");
-    if (!callout) {
-      callout = document.createElement("div");
-      callout.className = "hotspot-callout-card";
-      bpContainer.appendChild(callout);
-    }
-
-    hotspots.forEach((hs) => {
-      const pin = document.createElement("div");
-      pin.className = "hotspot-pin";
-      pin.style.top = `${hs.top}%`;
-      pin.style.left = `${hs.left}%`;
-      pin.title = hs.title;
-
-      pin.addEventListener("mouseenter", (e) => {
-        e.stopPropagation();
-        playTacticalSound("click");
-        pin.classList.add("active");
-        callout.innerHTML = `
-          <div class="hotspot-card-header">
-            <span class="hotspot-card-title">${hs.title}</span>
-            <span class="hotspot-card-tag">${hs.tag}</span>
-          </div>
-          <p class="hotspot-card-desc">${hs.desc}</p>
-        `;
-
-        let top = hs.top + 5;
-        let left = hs.left;
-        if (left > 65) left = hs.left - 30;
-        if (top > 70) top = hs.top - 20;
-
-        callout.style.top = `${top}%`;
-        callout.style.left = `${left}%`;
-        callout.classList.add("visible");
-      });
-
-      pin.addEventListener("mouseleave", () => {
-        pin.classList.remove("active");
-        callout.classList.remove("visible");
-      });
-
-      bpContainer.appendChild(pin);
-    });
-  });
-}
-
-// ── Interactive Flight Envelope Chart (Canvas Engine) ──
-function initFlightEnvelopeCanvas() {
-  const canvas = document.getElementById("envelope-canvas");
-  if (!canvas) return;
-  const ctx = canvas.getContext("2d");
-  if (!ctx) return;
-
-  const rect = canvas.getBoundingClientRect();
-  const dpr = window.devicePixelRatio || 1;
-  canvas.width = rect.width * dpr;
-  canvas.height = rect.height * dpr;
-  ctx.scale(dpr, dpr);
-
-  const w = rect.width;
-  const h = rect.height;
-  const padLeft = 55;
-  const padBottom = 40;
-  const padTop = 20;
-  const padRight = 25;
-
-  const chartW = w - padLeft - padRight;
-  const chartH = h - padTop - padBottom;
-
-  ctx.clearRect(0, 0, w, h);
-
-  const isDark = document.body.classList.contains("dark-theme");
-  const textColor = isDark ? "#94a3b8" : "#64748b";
-  const gridColor = isDark ? "rgba(255,255,255,0.06)" : "rgba(15,23,42,0.06)";
-  const accentColor = isDark ? "#38bdf8" : "#0284c7";
-
-  ctx.lineWidth = 1;
-  ctx.strokeStyle = gridColor;
-  ctx.fillStyle = textColor;
-  ctx.font = "10px Fira Code, monospace";
-
-  for (let m = 0; m <= 8; m += 1) {
-    const x = padLeft + (m / 8) * chartW;
-    ctx.beginPath();
-    ctx.moveTo(x, padTop);
-    ctx.lineTo(x, padTop + chartH);
-    ctx.stroke();
-    ctx.textAlign = "center";
-    ctx.fillText(`M${m}`, x, padTop + chartH + 18);
-  }
-
-  for (let alt = 0; alt <= 150; alt += 30) {
-    const y = padTop + chartH - (alt / 150) * chartH;
-    ctx.beginPath();
-    ctx.moveTo(padLeft, y);
-    ctx.lineTo(padLeft + chartW, y);
-    ctx.stroke();
-    ctx.textAlign = "right";
-    ctx.fillText(`${alt}k ft`, padLeft - 8, y + 3);
-  }
-
-  const envelopePoints = [
-    { m: 0.2, alt: 0 },
-    { m: 0.8, alt: 35 },
-    { m: 1.5, alt: 48 },
-    { m: 3.5, alt: 75 },
-    { m: 6.0, alt: 110 },
-    { m: 7.5, alt: 135 },
-    { m: 8.0, alt: 150 },
-    { m: 6.5, alt: 150 },
-    { m: 4.0, alt: 100 },
-    { m: 2.0, alt: 60 },
-    { m: 0.9, alt: 0 }
-  ];
-
-  ctx.beginPath();
-  envelopePoints.forEach((pt, i) => {
-    const px = padLeft + (pt.m / 8) * chartW;
-    const py = padTop + chartH - (pt.alt / 150) * chartH;
-    if (i === 0) ctx.moveTo(px, py);
-    else ctx.lineTo(px, py);
-  });
-  ctx.closePath();
-
-  const fillGradient = ctx.createLinearGradient(padLeft, padTop, padLeft + chartW, padTop + chartH);
-  fillGradient.addColorStop(0, isDark ? "rgba(56, 189, 248, 0.25)" : "rgba(2, 132, 199, 0.18)");
-  fillGradient.addColorStop(0.5, isDark ? "rgba(96, 165, 250, 0.18)" : "rgba(29, 78, 216, 0.12)");
-  fillGradient.addColorStop(1, isDark ? "rgba(245, 158, 11, 0.15)" : "rgba(217, 119, 6, 0.1)");
-  ctx.fillStyle = fillGradient;
-  ctx.fill();
-
-  ctx.strokeStyle = accentColor;
-  ctx.lineWidth = 2;
-  ctx.stroke();
-
-  ctx.font = "9px Fira Code, monospace";
-  ctx.fillStyle = isDark ? "#38bdf8" : "#0284c7";
-  ctx.textAlign = "left";
-  ctx.fillText("Stage 1: Turbofan", padLeft + (0.5 / 8) * chartW, padTop + chartH - (20 / 150) * chartH);
-  ctx.fillText("Stage 2: Ramjet", padLeft + (2.0 / 8) * chartW, padTop + chartH - (55 / 150) * chartH);
-  ctx.fillText("Stage 3: RDRE + Scramjet Corridor", padLeft + (4.2 / 8) * chartW, padTop + chartH - (95 / 150) * chartH);
-  ctx.fillText("Stage 4: Exo-Rocket (150k ft)", padLeft + (6.2 / 8) * chartW, padTop + chartH - (142 / 150) * chartH);
-
-  canvas.onmousemove = (e) => {
-    const cRect = canvas.getBoundingClientRect();
-    const mx = e.clientX - cRect.left;
-    const my = e.clientY - cRect.top;
-
-    if (mx >= padLeft && mx <= padLeft + chartW && my >= padTop && my <= padTop + chartH) {
-      const calcMach = ((mx - padLeft) / chartW) * 8;
-      const calcAlt = ((padTop + chartH - my) / chartH) * 150;
-
-      initFlightEnvelopeCanvas();
-
-      ctx.save();
-      ctx.setLineDash([4, 4]);
-      ctx.strokeStyle = isDark ? "#f59e0b" : "#d97706";
-      ctx.lineWidth = 1;
-
-      ctx.beginPath();
-      ctx.moveTo(mx, padTop);
-      ctx.lineTo(mx, padTop + chartH);
-      ctx.stroke();
-
-      ctx.beginPath();
-      ctx.moveTo(padLeft, my);
-      ctx.lineTo(padLeft + chartW, my);
-      ctx.stroke();
-      ctx.restore();
-
-      const altitudeMeters = calcAlt * 304.8;
-      const rho = 1.225 * Math.exp(-altitudeMeters / 7400);
-      const speedOfSound = 340.29 * Math.sqrt(Math.max(216.65, 288.15 - 0.0065 * altitudeMeters) / 288.15);
-      const velocityMs = calcMach * speedOfSound;
-      const dynamicPressureKPa = (0.5 * rho * velocityMs * velocityMs) / 1000;
-      const stagTempC = (216.65 * (1 + 0.2 * calcMach * calcMach)) - 273.15;
-
-      const telMach = document.getElementById("tel-mach");
-      const telAlt = document.getElementById("tel-alt");
-      const telQ = document.getElementById("tel-q");
-      const telTemp = document.getElementById("tel-temp");
-
-      if (telMach) telMach.textContent = `Mach ${calcMach.toFixed(2)} (${Math.round(velocityMs * 3.6)} km/h)`;
-      if (telAlt) telAlt.textContent = `${Math.round(calcAlt * 1000).toLocaleString()} ft (${(altitudeMeters / 1000).toFixed(1)} km)`;
-      if (telQ) telQ.textContent = `${dynamicPressureKPa.toFixed(1)} kPa`;
-      if (telTemp) telTemp.textContent = `${Math.round(stagTempC)} °C`;
-    }
-  };
-}
-
-// ── Subsystem 6th-Gen Comparison Matrix Engine ─────────
-function initComparisonMatrix() {
-  const filterBtns = document.querySelectorAll(".compare-filter-btn");
-  const rows = document.querySelectorAll("#compare-table-body tr");
-
-  filterBtns.forEach((btn) => {
-    btn.addEventListener("click", () => {
-      playTacticalSound("click");
-      filterBtns.forEach((b) => b.classList.remove("active"));
-      btn.classList.add("active");
-      const category = btn.dataset.compareFilter;
-
-      rows.forEach((row) => {
-        if (category === "all" || row.dataset.compareCategory?.includes(category)) {
-          row.style.display = "";
-        } else {
-          row.style.display = "none";
-        }
-      });
-    });
-  });
-}
-
-// ── Valkyrie-X Missile Mission & Payload Configurator ──
-function initValkyrieConfigurator() {
-  const missionBtns = document.querySelectorAll(".config-mission-btn");
-  const warheadBtns = document.querySelectorAll(".config-warhead-btn");
-
-  let currentMission = "intercept";
-  let currentWarhead = "kinetic";
-
-  const MISSION_PARAMS = {
-    intercept: { name: "Air-to-Air Intercept", baseWeight: 85, mach: 6.5, range: 280, baseYield: 207 },
-    sead: { name: "SEAD Radar Suppression", baseWeight: 110, mach: 5.8, range: 340, baseYield: 260 },
-    armor: { name: "Naval Armor Penetration", baseWeight: 140, mach: 5.2, range: 240, baseYield: 380 },
-    swarm: { name: "Swarm EMP Disruption", baseWeight: 95, mach: 6.2, range: 310, baseYield: 180 }
-  };
-
-  const WARHEAD_MODIFIERS = {
-    kinetic: { weightAdd: 0, machMult: 1.0, yieldMult: 1.0 },
-    emp: { weightAdd: 15, machMult: 0.95, yieldMult: 0.85 },
-    frag: { weightAdd: 25, machMult: 0.92, yieldMult: 1.35 },
-    tandem: { weightAdd: 40, machMult: 0.88, yieldMult: 1.75 }
-  };
-
-  function updateConfigMetrics() {
-    const m = MISSION_PARAMS[currentMission];
-    const w = WARHEAD_MODIFIERS[currentWarhead];
-
-    const totalWeight = m.baseWeight + w.weightAdd;
-    const finalMach = (m.mach * w.machMult).toFixed(2);
-    const finalRange = Math.round(m.range * (100 / totalWeight) * 0.9);
-    const finalYield = Math.round(m.baseYield * w.yieldMult);
-
-    const elWeight = document.getElementById("cfg-weight");
-    const elSpeed = document.getElementById("cfg-speed");
-    const elRange = document.getElementById("cfg-range");
-    const elYield = document.getElementById("cfg-yield");
-    const elBar = document.getElementById("cfg-yield-bar");
-
-    if (elWeight) elWeight.innerHTML = `${totalWeight} <span>kg</span>`;
-    if (elSpeed) elSpeed.innerHTML = `Mach ${finalMach}`;
-    if (elRange) elRange.innerHTML = `${finalRange} <span>km</span>`;
-    if (elYield) elYield.innerHTML = `${finalYield} <span>MJ</span>`;
-    if (elBar) elBar.style.width = `${Math.min((finalYield / 450) * 100, 100)}%`;
-  }
-
-  missionBtns.forEach((btn) => {
-    btn.addEventListener("click", () => {
-      playTacticalSound("click");
-      missionBtns.forEach((b) => b.classList.remove("active"));
-      btn.classList.add("active");
-      currentMission = btn.dataset.mission;
-      updateConfigMetrics();
-    });
-  });
-
-  warheadBtns.forEach((btn) => {
-    btn.addEventListener("click", () => {
-      playTacticalSound("click");
-      warheadBtns.forEach((b) => b.classList.remove("active"));
-      btn.classList.add("active");
-      currentWarhead = btn.dataset.warhead;
-      updateConfigMetrics();
-    });
-  });
-
-  updateConfigMetrics();
-}
 
 // ── Monograph Subsystem Tabs Engine ────────────────────
 function initMonographTabs() {
@@ -906,7 +581,7 @@ const revealObserver = new IntersectionObserver(
 
 function applyAnimations(section) {
   const elements = section.querySelectorAll(
-    "h3, p, .hero-box, .callout, .table-wrap, .spec-card, .doc-list li, .module-card, .mission-card, .authors-strip, .divider, .math-card, .flight-envelope-widget, .compare-widget, .valkyrie-config-widget"
+    "h3, p, .hero-box, .callout, .table-wrap, .spec-card, .doc-list li, .module-card, .mission-card, .authors-strip, .divider, .math-card"
   );
   elements.forEach((el, index) => {
     el.classList.remove("reveal", "visible");
@@ -933,7 +608,6 @@ function toggleTheme() {
   const isDark = document.body.classList.toggle("dark-theme");
   localStorage.setItem("theme", isDark ? "dark" : "light");
   updateThemeLabel(isDark);
-  setTimeout(initFlightEnvelopeCanvas, 50);
 }
 
 function updateThemeLabel(isDark) {
@@ -962,8 +636,7 @@ function initBlueprintLightbox() {
       bp.appendChild(btn);
     }
 
-    bp.addEventListener("click", (e) => {
-      if (e.target.classList.contains("hotspot-pin") || e.target.closest(".hotspot-callout-card")) return;
+    bp.addEventListener("click", () => {
       playTacticalSound("click");
       if (lbImg) lbImg.src = img.src;
       if (lbTitle) lbTitle.textContent = img.alt || "DECKY CAP Technical Schematic";
@@ -1035,7 +708,7 @@ function initAcronymTooltips() {
   }
 
   document.querySelectorAll("p, td, li, .callout p, .mc-desc").forEach((node) => {
-    if (node.dataset.acronymized || node.closest(".hotspot-callout-card") || node.closest(".cmd-palette-container") || node.closest("#json-export-modal")) return;
+    if (node.dataset.acronymized || node.closest(".cmd-palette-container") || node.closest("#json-export-modal")) return;
     node.dataset.acronymized = "true";
 
     let html = node.innerHTML;
@@ -1047,7 +720,7 @@ function initAcronymTooltips() {
   });
 
   document.querySelectorAll(".acronym-tag").forEach((tag) => {
-    tag.addEventListener("mouseenter", (e) => {
+    tag.addEventListener("mouseenter", () => {
       const code = tag.dataset.acronym;
       const data = ACRONYM_REGISTRY[code];
       if (!data) return;
@@ -1122,8 +795,8 @@ function initCustomCursor() {
   requestAnimationFrame(renderCursor);
 
   document.body.addEventListener("mouseover", (e) => {
-    const magneticEl = e.target.closest(".spec-card, .module-card, .mission-card, .cmd-result-item, .config-btn, .compare-filter-btn, .mono-tab-btn");
-    const clickableEl = e.target.closest("a, .nav-item, .fnav-btn, .sb-toggle, .theme-btn, .blueprint-img, .acronym-tag, .search-trigger, .cmd-filter-btn, .hotspot-pin, .export-spec-btn, .audio-btn");
+    const magneticEl = e.target.closest(".spec-card, .module-card, .mission-card, .cmd-result-item, .mono-tab-btn");
+    const clickableEl = e.target.closest("a, .nav-item, .fnav-btn, .sb-toggle, .theme-btn, .blueprint-img, .acronym-tag, .search-trigger, .cmd-filter-btn, .export-spec-btn, .audio-btn");
     if (magneticEl) {
       hoverTarget = magneticEl;
       cursor.classList.add("magnetic");
@@ -1136,8 +809,8 @@ function initCustomCursor() {
   });
 
   document.body.addEventListener("mouseout", (e) => {
-    const magneticEl = e.target.closest(".spec-card, .module-card, .mission-card, .cmd-result-item, .config-btn, .compare-filter-btn, .mono-tab-btn");
-    const clickableEl = e.target.closest("a, .nav-item, .fnav-btn, .sb-toggle, .theme-btn, .blueprint-img, .acronym-tag, .search-trigger, .cmd-filter-btn, .hotspot-pin, .export-spec-btn, .audio-btn");
+    const magneticEl = e.target.closest(".spec-card, .module-card, .mission-card, .cmd-result-item, .mono-tab-btn");
+    const clickableEl = e.target.closest("a, .nav-item, .fnav-btn, .sb-toggle, .theme-btn, .blueprint-img, .acronym-tag, .search-trigger, .cmd-filter-btn, .export-spec-btn, .audio-btn");
     if (magneticEl || clickableEl) {
       hoverTarget = null;
       cursor.classList.remove("magnetic", "hover");
@@ -1197,19 +870,11 @@ document.addEventListener("DOMContentLoaded", () => {
   initProgressBar();
   initKeyboardNav();
   initBlueprintLightbox();
-  initBlueprintHotspots();
   initAcronymTooltips();
   initCommandPalette();
-  initFlightEnvelopeCanvas();
-  initComparisonMatrix();
-  initValkyrieConfigurator();
   initMonographTabs();
   initSpecExporter();
   initAudioToggle();
-
-  window.addEventListener("resize", () => {
-    initFlightEnvelopeCanvas();
-  });
 
   const overlay = document.getElementById("sidebar-overlay");
   if (overlay) overlay.addEventListener("click", () => document.body.classList.remove("sidebar-open"));
