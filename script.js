@@ -819,6 +819,110 @@ function initCustomCursor() {
   });
 }
 
+// ── Tactical Deep-Link Toast System ───────────────────
+let toastTimeout = null;
+const CANONICAL_BASE_URL = "https://decky-docu.vercel.app/";
+
+function showToast(message, url = "") {
+  const toast = document.getElementById("tactical-toast");
+  const msgEl = document.getElementById("toast-message");
+  const urlEl = document.getElementById("toast-url");
+  if (!toast || !msgEl) return;
+
+  msgEl.textContent = message;
+  if (urlEl) {
+    urlEl.textContent = url;
+    urlEl.style.display = url ? "inline" : "none";
+  }
+
+  toast.classList.add("visible");
+  if (toastTimeout) clearTimeout(toastTimeout);
+  toastTimeout = setTimeout(() => {
+    toast.classList.remove("visible");
+  }, 2600);
+}
+
+// ── One-Click Heading Deep-Link Sharing ───────────────
+function initHeadingDeepLinks() {
+  document.querySelectorAll(".section").forEach((section) => {
+    const secId = section.id;
+    const secKey = Object.keys(sectionMap).find((k) => sectionMap[k] === secId) || "overview";
+
+    // 1. Section Main Title
+    const mainTitle = section.querySelector(".sec-title");
+    if (mainTitle && !mainTitle.querySelector(".heading-anchor-link")) {
+      const anchor = document.createElement("a");
+      anchor.className = "heading-anchor-link";
+      anchor.innerHTML = `<span>#</span>`;
+      anchor.title = `Copy direct link: ${CANONICAL_BASE_URL}#${secKey}`;
+      anchor.setAttribute("aria-label", `Copy deep link to ${secKey}`);
+
+      anchor.addEventListener("click", (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        const deepUrl = `${CANONICAL_BASE_URL}#${secKey}`;
+        navigator.clipboard.writeText(deepUrl).then(() => {
+          playTacticalSound("click");
+          if (window.location.hash !== `#${secKey}`) {
+            history.pushState(null, "", `#${secKey}`);
+          }
+          showToast("Direct Link Copied", `#${secKey}`);
+        });
+      });
+
+      mainTitle.appendChild(anchor);
+    }
+
+    // 2. Sub-headings (h3)
+    section.querySelectorAll("h3").forEach((h3) => {
+      if (!h3.querySelector(".heading-anchor-link")) {
+        const anchor = document.createElement("a");
+        anchor.className = "heading-anchor-link";
+        anchor.innerHTML = `<span>#</span>`;
+        anchor.title = `Copy direct link to section`;
+
+        anchor.addEventListener("click", (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          const deepUrl = `${CANONICAL_BASE_URL}#${secKey}`;
+          navigator.clipboard.writeText(deepUrl).then(() => {
+            playTacticalSound("click");
+            if (window.location.hash !== `#${secKey}`) {
+              history.pushState(null, "", `#${secKey}`);
+            }
+            showToast("Section Link Copied", `#${secKey}`);
+          });
+        });
+
+        h3.appendChild(anchor);
+      }
+    });
+
+    // 3. Mathematical Formula Cards
+    section.querySelectorAll(".math-card").forEach((card) => {
+      const header = card.querySelector(".math-header");
+      if (header && !header.querySelector(".heading-anchor-link")) {
+        const anchor = document.createElement("a");
+        anchor.className = "heading-anchor-link";
+        anchor.innerHTML = `<span>#</span>`;
+        anchor.title = `Copy direct link to formula`;
+
+        anchor.addEventListener("click", (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          const deepUrl = `${CANONICAL_BASE_URL}#${secKey}`;
+          navigator.clipboard.writeText(deepUrl).then(() => {
+            playTacticalSound("click");
+            showToast("Formula Card Copied", `#${secKey}`);
+          });
+        });
+
+        header.appendChild(anchor);
+      }
+    });
+  });
+}
+
 // ── Reading Progress Bar ──────────────────────────────
 function initProgressBar() {
   const bar = document.getElementById("progress-bar");
@@ -876,6 +980,7 @@ document.addEventListener("DOMContentLoaded", () => {
   initMonographTabs();
   initSpecExporter();
   initAudioToggle();
+  initHeadingDeepLinks();
 
   const overlay = document.getElementById("sidebar-overlay");
   if (overlay) overlay.addEventListener("click", () => document.body.classList.remove("sidebar-open"));
