@@ -52,7 +52,7 @@
 
     <!-- GLOBAL SEARCH TRIGGER -->
     <div class="hd-center">
-      <button class="search-trigger" id="searchTrigger" aria-label="Search specifications and subsystems (Ctrl+K)">
+      <button class="search-trigger" id="searchTrigger" aria-label="Search specifications and subsystems (Shift+S)">
         <div class="search-trigger-content">
           <svg class="search-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor">
             <circle cx="8.5" cy="8.5" r="5.5" stroke-width="1.8" />
@@ -60,7 +60,7 @@
           </svg>
           <span>Search specs &amp; systems...</span>
         </div>
-        <kbd class="kbd-badge">⌘K</kbd>
+        <kbd class="kbd-badge">⇧S</kbd>
       </button>
     </div>
 
@@ -82,7 +82,7 @@
     <div id="sidebar-overlay"></div>
 
     <!-- SIDEBAR -->
-    <aside>
+    <aside class="sidebar" id="sidebar">
       <div class="sb-label">Document Overview</div>
       <div class="nav-item active" onclick="show('overview')"><span class="nav-num">00</span> Overview &amp; Concept</div>
 
@@ -874,14 +874,14 @@
       </main>
 
       <!-- ON-PAGE SUB-TOC (Desktop Floating Right) -->
-      <aside class="on-this-page-toc" id="on-page-toc">
+      <nav class="on-this-page-toc" id="on-page-toc" aria-label="On this page navigation">
         <div class="toc-title">On This Page</div>
         <ul class="toc-list"></ul>
-      </aside>
+      </nav>
     </div>
   </div>
 
-  <!-- COMMAND PALETTE MODAL (Cmd+K) -->
+  <!-- COMMAND PALETTE MODAL (Shift+S) -->
   <div id="cmd-palette-modal" role="dialog" aria-modal="true" aria-label="Command & Search Palette">
     <div class="cmd-palette-container">
       <div class="cmd-input-wrap">
@@ -904,9 +904,9 @@
       <ul class="cmd-results-list" id="cmd-results-list"></ul>
       <div class="cmd-footer">
         <div class="cmd-shortcuts-hint">
+          <span><kbd class="kbd-badge">⇧S</kbd> Search</span>
           <span><kbd class="kbd-badge">↑</kbd> <kbd class="kbd-badge">↓</kbd> Navigate</span>
           <span><kbd class="kbd-badge">↵</kbd> Select</span>
-          <span><kbd class="kbd-badge">/</kbd> Quick Search</span>
         </div>
         <span>Level-6 Defense Knowledge Base</span>
       </div>

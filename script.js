@@ -381,16 +381,17 @@ function initCommandPalette() {
   if (trigger) trigger.addEventListener("click", openPalette);
 
   document.addEventListener("keydown", (e) => {
-    if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
+    const isShiftS = e.shiftKey && (e.key === "S" || e.key === "s") && !["INPUT", "TEXTAREA", "SELECT"].includes(e.target.tagName);
+    const isCmdK = (e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k";
+    const isSlash = e.key === "/" && !["INPUT", "TEXTAREA", "SELECT"].includes(e.target.tagName);
+
+    if (isShiftS || isCmdK || isSlash) {
       e.preventDefault();
       if (modal.classList.contains("active")) {
         closePalette();
       } else {
         openPalette();
       }
-    } else if (e.key === "/" && !["INPUT", "TEXTAREA"].includes(e.target.tagName)) {
-      e.preventDefault();
-      openPalette();
     } else if (e.key === "Escape" && modal.classList.contains("active")) {
       closePalette();
     }

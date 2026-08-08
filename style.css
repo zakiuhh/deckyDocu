@@ -440,7 +440,7 @@ body.sidebar-collapsed .sb-toggle-icon {
 }
 
 /* ── Sidebar ── */
-aside {
+.sidebar {
   width: var(--sidebar-width);
   flex-shrink: 0;
   position: fixed;
@@ -457,7 +457,7 @@ aside {
   z-index: 90;
 }
 
-body.sidebar-open aside {
+body.sidebar-open .sidebar {
   transform: translateX(0);
   box-shadow: 4px 0 24px rgba(0, 0, 0, 0.12);
 }
@@ -478,17 +478,17 @@ body.sidebar-open #sidebar-overlay {
   pointer-events: all;
 }
 
-aside::-webkit-scrollbar {
+.sidebar::-webkit-scrollbar {
   width: 3px;
 }
 
-aside::-webkit-scrollbar-thumb {
+.sidebar::-webkit-scrollbar-thumb {
   background: var(--border-strong);
   border-radius: 2px;
 }
 
 @media (min-width: 769px) {
-  aside {
+  .sidebar {
     transform: translateX(0);
     box-shadow: none;
     z-index: 80;
@@ -498,7 +498,7 @@ aside::-webkit-scrollbar-thumb {
     display: none;
   }
 
-  body.sidebar-collapsed aside {
+  body.sidebar-collapsed .sidebar {
     transform: translateX(-100%);
   }
 }
@@ -609,7 +609,12 @@ body.dark-theme .theme-btn .theme-icon-dark {
   width: 100%;
   min-width: 0;
   justify-content: center;
+  align-items: flex-start;
   position: relative;
+  max-width: 1360px;
+  margin: 0 auto;
+  padding: 0 var(--space-4);
+  gap: var(--space-6);
 }
 
 main {
@@ -617,12 +622,12 @@ main {
   width: 100%;
   min-width: 0;
   max-width: 860px;
-  padding: 0 var(--space-5) var(--space-12);
+  padding: 0 0 var(--space-12);
 }
 
 @media (min-width: 1024px) {
   main {
-    padding: 0 var(--space-8) 100px;
+    padding: 0 0 100px;
   }
 }
 
@@ -665,20 +670,29 @@ main {
 /* ── On-Page Sub-TOC (Desktop Floating Right) ── */
 .on-this-page-toc {
   display: none;
-  width: var(--toc-width);
+  width: 220px;
   flex-shrink: 0;
   position: sticky;
   top: calc(var(--header-height) + 24px);
-  height: calc(100vh - var(--header-height) - 48px);
-  padding: var(--space-4) var(--space-3);
-  margin-left: var(--space-6);
-  border-left: 1px solid var(--border);
+  max-height: calc(100vh - var(--header-height) - 48px);
+  padding: var(--space-4) var(--space-4);
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--card-shadow);
   font-size: 12px;
   overflow-y: auto;
+  z-index: 20;
 }
 
-@media (min-width: 1280px) {
+@media (min-width: 1440px) {
   .on-this-page-toc {
+    display: block;
+  }
+}
+
+@media (min-width: 1200px) {
+  body.sidebar-collapsed .on-this-page-toc {
     display: block;
   }
 }
