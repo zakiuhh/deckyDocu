@@ -49,6 +49,21 @@
       <div class="hd-div"></div>
       <span class="hd-sub">Tech Monograph</span>
     </div>
+
+    <!-- GLOBAL SEARCH TRIGGER -->
+    <div class="hd-center">
+      <button class="search-trigger" id="searchTrigger" aria-label="Search specifications and subsystems (Ctrl+K)">
+        <div class="search-trigger-content">
+          <svg class="search-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor">
+            <circle cx="8.5" cy="8.5" r="5.5" stroke-width="1.8" />
+            <line x1="12.5" y1="12.5" x2="17" y2="17" stroke-width="1.8" stroke-linecap="round" />
+          </svg>
+          <span>Search specs &amp; systems...</span>
+        </div>
+        <kbd class="kbd-badge">⌘K</kbd>
+      </button>
+    </div>
+
     <div class="hd-right">
       <span class="tag tag-r">Aero Research</span>
       <span class="tag tag-c">Restricted / Level-6</span>
@@ -112,6 +127,13 @@
 
         <!-- 00. OVERVIEW -->
         <div class="section active" id="sec-overview">
+          <div class="breadcrumb-trail">
+            <span class="bc-root" onclick="show('overview')">Monograph</span>
+            <span class="bc-sep">/</span>
+            <span class="bc-cat">Architecture Overview</span>
+            <span class="bc-sep">/</span>
+            <span class="bc-current">DECKY CAP Drone Platform</span>
+          </div>
           <div class="sec-classification-banner">
             <span>Doc ID: DECKY-AERO-2026-00</span>
             <span>Classification: Level-6 Unclassified Monograph</span>
@@ -208,6 +230,13 @@
 
         <!-- 01. PROPULSION -->
         <div class="section" id="sec-propulsion">
+          <div class="breadcrumb-trail">
+            <span class="bc-root" onclick="show('overview')">Monograph</span>
+            <span class="bc-sep">/</span>
+            <span class="bc-cat">Core Engineering</span>
+            <span class="bc-sep">/</span>
+            <span class="bc-current">XH-800 Hydra Engine</span>
+          </div>
           <div class="sec-classification-banner">
             <span>Doc ID: DECKY-PROP-800</span>
             <span>Subsystem: Hypersonic Combined Cycle</span>
@@ -312,6 +341,13 @@
 
         <!-- 02. STEALTH -->
         <div class="section" id="sec-stealth">
+          <div class="breadcrumb-trail">
+            <span class="bc-root" onclick="show('overview')">Monograph</span>
+            <span class="bc-sep">/</span>
+            <span class="bc-cat">Core Engineering</span>
+            <span class="bc-sep">/</span>
+            <span class="bc-current">Chameleon-Wing Stealth</span>
+          </div>
           <div class="sec-classification-banner">
             <span>Doc ID: DECKY-STEALTH-CHAM</span>
             <span>Subsystem: Low Observability Airframe</span>
@@ -380,6 +416,13 @@
 
         <!-- 03. CONTROL -->
         <div class="section" id="sec-control">
+          <div class="breadcrumb-trail">
+            <span class="bc-root" onclick="show('overview')">Monograph</span>
+            <span class="bc-sep">/</span>
+            <span class="bc-cat">Core Engineering</span>
+            <span class="bc-sep">/</span>
+            <span class="bc-current">HCFS-X Fire Control</span>
+          </div>
           <div class="sec-classification-banner">
             <span>Doc ID: DECKY-FCS-HCFSX</span>
             <span>Subsystem: Autonomous Fire Control Matrix</span>
@@ -472,6 +515,13 @@
 
         <!-- 04. MISSILE -->
         <div class="section" id="sec-missile">
+          <div class="breadcrumb-trail">
+            <span class="bc-root" onclick="show('overview')">Monograph</span>
+            <span class="bc-sep">/</span>
+            <span class="bc-cat">Core Engineering</span>
+            <span class="bc-sep">/</span>
+            <span class="bc-current">VALKYRIE-X Missile</span>
+          </div>
           <div class="sec-classification-banner">
             <span>Doc ID: DECKY-ORD-VALK</span>
             <span>Subsystem: AI-Linked Hypersonic Kinetic Strike</span>
@@ -535,6 +585,13 @@
 
         <!-- 05. CYBER -->
         <div class="section" id="sec-cyber">
+          <div class="breadcrumb-trail">
+            <span class="bc-root" onclick="show('overview')">Monograph</span>
+            <span class="bc-sep">/</span>
+            <span class="bc-cat">Defense Architectures</span>
+            <span class="bc-sep">/</span>
+            <span class="bc-current">Tri-Tier Cyber Hardening</span>
+          </div>
           <div class="sec-classification-banner">
             <span>Doc ID: DECKY-CYBER-SEC</span>
             <span>Subsystem: Resilient Autonomy &amp; Cryptosecurity</span>
@@ -580,6 +637,13 @@
 
         <!-- 06. SENSORY -->
         <div class="section" id="sec-sensory">
+          <div class="breadcrumb-trail">
+            <span class="bc-root" onclick="show('overview')">Monograph</span>
+            <span class="bc-sep">/</span>
+            <span class="bc-cat">Defense Architectures</span>
+            <span class="bc-sep">/</span>
+            <span class="bc-current">Sensory Dominance Suite</span>
+          </div>
           <div class="sec-classification-banner">
             <span>Doc ID: DECKY-SENS-SPEC</span>
             <span>Subsystem: Multi-Spectrum Sensory Array</span>
@@ -635,6 +699,13 @@
 
         <!-- 07. MISSIONS -->
         <div class="section" id="sec-missions">
+          <div class="breadcrumb-trail">
+            <span class="bc-root" onclick="show('overview')">Monograph</span>
+            <span class="bc-sep">/</span>
+            <span class="bc-cat">Operational Deployment</span>
+            <span class="bc-sep">/</span>
+            <span class="bc-current">Tactical Mission Profiles</span>
+          </div>
           <div class="sec-classification-banner">
             <span>Doc ID: DECKY-OPS-PROFILES</span>
             <span>Subsystem: Operational Mission Sets</span>
@@ -694,6 +765,13 @@
 
         <!-- 08. COMPAT -->
         <div class="section" id="sec-compat">
+          <div class="breadcrumb-trail">
+            <span class="bc-root" onclick="show('overview')">Monograph</span>
+            <span class="bc-sep">/</span>
+            <span class="bc-cat">Operational Deployment</span>
+            <span class="bc-sep">/</span>
+            <span class="bc-current">Platform Compatibility</span>
+          </div>
           <div class="sec-classification-banner">
             <span>Doc ID: DECKY-COMPAT-ARCH</span>
             <span>Subsystem: Multi-Domain Interoperability</span>
@@ -771,6 +849,38 @@
         <div class="toc-title">On This Page</div>
         <ul class="toc-list"></ul>
       </aside>
+    </div>
+  </div>
+
+  <!-- COMMAND PALETTE MODAL (Cmd+K) -->
+  <div id="cmd-palette-modal" role="dialog" aria-modal="true" aria-label="Command & Search Palette">
+    <div class="cmd-palette-container">
+      <div class="cmd-input-wrap">
+        <svg class="cmd-search-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor">
+          <circle cx="8.5" cy="8.5" r="5.5" stroke-width="1.8" />
+          <line x1="12.5" y1="12.5" x2="17" y2="17" stroke-width="1.8" stroke-linecap="round" />
+        </svg>
+        <input type="text" class="cmd-input" id="cmd-search-input" placeholder="Search systems, propulsion stages, acronyms, or commands..." autocomplete="off" />
+        <kbd class="kbd-badge">ESC</kbd>
+      </div>
+      <div class="cmd-filter-tabs">
+        <button class="cmd-filter-btn active" data-filter="all">All</button>
+        <button class="cmd-filter-btn" data-filter="propulsion">Propulsion</button>
+        <button class="cmd-filter-btn" data-filter="stealth">Stealth</button>
+        <button class="cmd-filter-btn" data-filter="avionics">Avionics &amp; Radar</button>
+        <button class="cmd-filter-btn" data-filter="weapons">Weapons</button>
+        <button class="cmd-filter-btn" data-filter="missions">Missions</button>
+        <button class="cmd-filter-btn" data-filter="actions">Actions</button>
+      </div>
+      <ul class="cmd-results-list" id="cmd-results-list"></ul>
+      <div class="cmd-footer">
+        <div class="cmd-shortcuts-hint">
+          <span><kbd class="kbd-badge">↑</kbd> <kbd class="kbd-badge">↓</kbd> Navigate</span>
+          <span><kbd class="kbd-badge">↵</kbd> Select</span>
+          <span><kbd class="kbd-badge">/</kbd> Quick Search</span>
+        </div>
+        <span>Level-6 Defense Knowledge Base</span>
+      </div>
     </div>
   </div>
 

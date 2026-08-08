@@ -1,6 +1,6 @@
 /* ==========================================================================
    DECKY CAP — Option B: Technical Monograph & Aerospace Paper Engine
-   Interactive Telemetry · Deep Linking · Lightbox · Acronym Registry
+   Interactive Telemetry · Deep Linking · Lightbox · Acronym Registry · Cmd+K
    ========================================================================== */
 
 const sectionMap = {
@@ -14,6 +14,46 @@ const sectionMap = {
   missions: "sec-missions",
   compat: "sec-compat",
 };
+
+const sectionMetadata = {
+  overview: { category: "Architecture Overview", title: "DECKY CAP Drone Platform" },
+  propulsion: { category: "Core Engineering", title: "XH-800 Hydra Hypersonic Engine" },
+  stealth: { category: "Core Engineering", title: "Chameleon-Wing Stealth Body" },
+  control: { category: "Core Engineering", title: "HCFS-X Fire Control Matrix" },
+  missile: { category: "Core Engineering", title: "VALKYRIE-X Hypersonic Interceptor" },
+  cyber: { category: "Defense Architectures", title: "Tri-Tier Cyber Hardening" },
+  sensory: { category: "Defense Architectures", title: "Integrated Sensory Dominance" },
+  missions: { category: "Operational Deployment", title: "Tactical Mission Profiles" },
+  compat: { category: "Operational Deployment", title: "Platform Compatibility Matrix" },
+};
+
+// ── Searchable Command Palette Index ───────────────────
+const SEARCH_INDEX = [
+  { id: "overview", category: "overview", icon: "📐", title: "DECKY CAP Platform Overview", desc: "Sixth-gen autonomous combat drone reference architecture." },
+  { id: "propulsion", category: "propulsion", icon: "🚀", title: "XH-800 Hydra Hypersonic Engine", desc: "Combined-cycle turbofan, ramjet, RDRE, scramjet & rocket." },
+  { id: "propulsion", category: "propulsion", icon: "⚡", title: "Rotating Detonation Combustion (RDRE)", desc: "Continuous supersonic detonation waves for Mach 3.5–8.0 flight." },
+  { id: "propulsion", category: "propulsion", icon: "🔥", title: "Fuel & Propellant Specifications", desc: "JP-10 synthetic jet fuel, cryogenic methane, HTP oxidizer." },
+  { id: "stealth", category: "stealth", icon: "🛡️", title: "Chameleon-Wing Stealth Geometry", desc: "Biomimetic continuous-curvature blended-wing airframe." },
+  { id: "stealth", category: "stealth", icon: "🧲", title: "NanoIronCloak RAM Coating", desc: "Multi-layered carbon nanotube microwave RF absorption." },
+  { id: "stealth", category: "stealth", icon: "📡", title: "Active Coherent Wave Cancellation", desc: "Anti-phase radar pulse emission nullifying reflections." },
+  { id: "stealth", category: "stealth", icon: "🎨", title: "SolarFlux Photochromic Skin", desc: "Dynamic electrochromic daytime & dusk horizon camouflage." },
+  { id: "control", category: "avionics", icon: "🧠", title: "HCFS-X AI Combat Matrix", desc: "Edge-AI neuromorphic tensor processor for autonomous battle decisions." },
+  { id: "control", category: "avionics", icon: "📡", title: "MURAD++ Conformal AESA Radar", desc: "360° Gallium Nitride (GaN) LPI track-while-scan radar." },
+  { id: "control", category: "avionics", icon: "⚡", title: "65kW Directed Energy Laser Turret", desc: "Fiber laser point-defense against incoming AAM missiles." },
+  { id: "control", category: "avionics", icon: "🛰️", title: "Quantum Key Enclave Datalink", desc: "Photonic entangled cryptographic anti-hijack communication." },
+  { id: "missile", category: "weapons", icon: "🎯", title: "VALKYRIE-X Hypersonic Missile", desc: "Mach 6.5 AI-linked kinetic interceptor with 280+ km range." },
+  { id: "missile", category: "weapons", icon: "💥", title: "Kinetic & EMP Warhead Configurations", desc: "Selectable shaped-charge, high-frag, or EMP pulse modules." },
+  { id: "cyber", category: "avionics", icon: "🔒", title: "Tri-Tier Cyberdefense Envelope", desc: "Optical air-gap isolation and cryptographic zeroize fail-safe." },
+  { id: "sensory", category: "avionics", icon: "👁️", title: "Conformal EOTS & Spherical DAS", desc: "360° multi-spectrum electro-optical/infrared thermal imaging." },
+  { id: "missions", category: "missions", icon: "⚔️", title: "SEAD / DEAD Air Defense Suppression", desc: "Hypersonic strikes neutralizing S-400 / S-500 SAM radars." },
+  { id: "missions", category: "missions", icon: "🤖", title: "Collaborative Swarm Command", desc: "Airborne command node orchestrating expendable loitering munitions." },
+  { id: "missions", category: "missions", icon: "⚡", title: "Hypersonic Time-Critical Interdiction", desc: "Mach 7.0+ rapid dash against mobile ballistic targets." },
+  { id: "compat", category: "missions", icon: "🚢", title: "Naval & Ground VLS Launch Integration", desc: "Mark 41 / 57 VLS canister deployment and containerized RATO." },
+  // Quick Actions
+  { action: "theme", category: "actions", icon: "🌗", title: "Toggle Monograph Theme", desc: "Switch between Light Whitepaper and Dark Carbon Monograph." },
+  { action: "lightbox", category: "actions", icon: "🔍", title: "Open Blueprint Inspector", desc: "Inspect current section schematic in high-res lightbox." },
+  { action: "invert", category: "actions", icon: "💡", title: "Invert Blueprint Schematic", desc: "Toggle inverted night-vision schematic contrast filter." }
+];
 
 // ── Defense Acronym Data Dictionary ───────────────────
 const ACRONYM_REGISTRY = {
@@ -94,6 +134,9 @@ function show(key, updateHash = true) {
     n.classList.toggle("active", n.getAttribute("onclick")?.includes(`'${key}'`));
   });
 
+  // Update Breadcrumbs
+  updateBreadcrumbs(key);
+
   // Smooth scroll to top of section
   window.scrollTo({ top: 0, behavior: "smooth" });
   applyAnimations(target);
@@ -110,6 +153,20 @@ function show(key, updateHash = true) {
   }
 }
 
+// ── Breadcrumb Generator ──────────────────────────────
+function updateBreadcrumbs(sectionKey) {
+  const meta = sectionMetadata[sectionKey] || { category: "Engineering Monograph", title: "Specification" };
+  document.querySelectorAll(".breadcrumb-trail").forEach((bc) => {
+    bc.innerHTML = `
+      <span class="bc-root" onclick="show('overview')">Monograph</span>
+      <span class="bc-sep">/</span>
+      <span class="bc-cat">${meta.category}</span>
+      <span class="bc-sep">/</span>
+      <span class="bc-current">${meta.title}</span>
+    `;
+  });
+}
+
 // Listen to browser Back/Forward navigation
 window.addEventListener("popstate", (e) => {
   const hash = window.location.hash.replace("#", "");
@@ -119,6 +176,163 @@ window.addEventListener("popstate", (e) => {
     show("overview", false);
   }
 });
+
+// ── Command Palette (Cmd+K) Engine ────────────────────
+let selectedPaletteIndex = 0;
+let currentPaletteFilter = "all";
+let filteredPaletteResults = [];
+
+function initCommandPalette() {
+  const modal = document.getElementById("cmd-palette-modal");
+  const input = document.getElementById("cmd-search-input");
+  const trigger = document.getElementById("searchTrigger");
+  const resultsList = document.getElementById("cmd-results-list");
+  const filterBtns = document.querySelectorAll(".cmd-filter-btn");
+
+  if (!modal || !input) return;
+
+  function openPalette() {
+    modal.classList.add("active");
+    input.value = "";
+    currentPaletteFilter = "all";
+    filterBtns.forEach((b) => b.classList.toggle("active", b.dataset.filter === "all"));
+    renderPaletteResults("");
+    setTimeout(() => input.focus(), 50);
+    document.body.style.overflow = "hidden";
+  }
+
+  function closePalette() {
+    modal.classList.remove("active");
+    document.body.style.overflow = "";
+  }
+
+  if (trigger) trigger.addEventListener("click", openPalette);
+
+  // Global Keyboard Shortcuts (Cmd+K, Ctrl+K, /)
+  document.addEventListener("keydown", (e) => {
+    if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
+      e.preventDefault();
+      if (modal.classList.contains("active")) {
+        closePalette();
+      } else {
+        openPalette();
+      }
+    } else if (e.key === "/" && !["INPUT", "TEXTAREA"].includes(e.target.tagName)) {
+      e.preventDefault();
+      openPalette();
+    } else if (e.key === "Escape" && modal.classList.contains("active")) {
+      closePalette();
+    }
+  });
+
+  modal.addEventListener("click", (e) => {
+    if (e.target === modal) closePalette();
+  });
+
+  input.addEventListener("input", () => {
+    renderPaletteResults(input.value.trim().toLowerCase());
+  });
+
+  filterBtns.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      filterBtns.forEach((b) => b.classList.remove("active"));
+      btn.classList.add("active");
+      currentPaletteFilter = btn.dataset.filter;
+      renderPaletteResults(input.value.trim().toLowerCase());
+    });
+  });
+
+  // Arrow & Enter Key Navigation
+  input.addEventListener("keydown", (e) => {
+    if (e.key === "ArrowDown") {
+      e.preventDefault();
+      selectedPaletteIndex = (selectedPaletteIndex + 1) % Math.max(filteredPaletteResults.length, 1);
+      updatePaletteSelection();
+    } else if (e.key === "ArrowUp") {
+      e.preventDefault();
+      selectedPaletteIndex = (selectedPaletteIndex - 1 + filteredPaletteResults.length) % Math.max(filteredPaletteResults.length, 1);
+      updatePaletteSelection();
+    } else if (e.key === "Enter") {
+      e.preventDefault();
+      const item = filteredPaletteResults[selectedPaletteIndex];
+      if (item) executePaletteItem(item);
+    }
+  });
+
+  function renderPaletteResults(query) {
+    filteredPaletteResults = SEARCH_INDEX.filter((item) => {
+      const matchesFilter = currentPaletteFilter === "all" || item.category === currentPaletteFilter;
+      if (!matchesFilter) return false;
+      if (!query) return true;
+      const haystack = `${item.title} ${item.desc} ${item.category} ${item.id || ""}`.toLowerCase();
+      return haystack.includes(query);
+    });
+
+    resultsList.innerHTML = "";
+    selectedPaletteIndex = 0;
+
+    if (filteredPaletteResults.length === 0) {
+      resultsList.innerHTML = `<li style="padding: 24px; text-align: center; color: var(--text-muted); font-size: 13px;">No matching subsystems or specifications found for "${query}".</li>`;
+      return;
+    }
+
+    filteredPaletteResults.forEach((item, idx) => {
+      const li = document.createElement("li");
+      li.className = `cmd-result-item ${idx === 0 ? "selected" : ""}`;
+      li.innerHTML = `
+        <div class="cmd-result-left">
+          <div class="cmd-item-icon">${item.icon}</div>
+          <div class="cmd-item-text">
+            <span class="cmd-item-title">${item.title}</span>
+            <span class="cmd-item-desc">${item.desc}</span>
+          </div>
+        </div>
+        <span class="cmd-item-badge">${item.category}</span>
+      `;
+
+      li.addEventListener("click", () => executePaletteItem(item));
+      li.addEventListener("mouseenter", () => {
+        selectedPaletteIndex = idx;
+        updatePaletteSelection();
+      });
+
+      resultsList.appendChild(li);
+    });
+  }
+
+  function updatePaletteSelection() {
+    const items = resultsList.querySelectorAll(".cmd-result-item");
+    items.forEach((item, idx) => {
+      item.classList.toggle("selected", idx === selectedPaletteIndex);
+      if (idx === selectedPaletteIndex) {
+        item.scrollIntoView({ block: "nearest" });
+      }
+    });
+  }
+
+  function executePaletteItem(item) {
+    closePalette();
+    if (item.id) {
+      show(item.id);
+    } else if (item.action === "theme") {
+      toggleTheme();
+    } else if (item.action === "lightbox") {
+      const activeSection = document.querySelector(".section.active");
+      const bp = activeSection?.querySelector(".blueprint-img img");
+      if (bp) {
+        const lb = document.getElementById("blueprint-lightbox");
+        const lbImg = document.getElementById("lightbox-img");
+        if (lb && lbImg) {
+          lbImg.src = bp.src;
+          lb.classList.add("active");
+        }
+      }
+    } else if (item.action === "invert") {
+      const lbImg = document.getElementById("lightbox-img");
+      if (lbImg) lbImg.classList.toggle("invert-blueprint");
+    }
+  }
+}
 
 // ── On-Page Floating Sub-TOC Generator ────────────────
 function buildSubTOC(section) {
@@ -309,7 +523,6 @@ function closeLightbox() {
 
 // ── Interactive Defense Acronym Tooltips ──────────────
 function initAcronymTooltips() {
-  // Create shared popover if not exists
   let popover = document.getElementById("acronym-popover");
   if (!popover) {
     popover = document.createElement("div");
@@ -318,21 +531,18 @@ function initAcronymTooltips() {
     document.body.appendChild(popover);
   }
 
-  // Scan text and wrap known acronyms
   document.querySelectorAll("p, td, li, .callout p, .mc-desc").forEach((node) => {
     if (node.dataset.acronymized) return;
     node.dataset.acronymized = "true";
 
     let html = node.innerHTML;
     Object.keys(ACRONYM_REGISTRY).forEach((acr) => {
-      // Regex boundary avoiding existing tags
       const regex = new RegExp(`\\b(${acr})\\b(?![^<]*>|[^<>]*<\\/)`, "g");
       html = html.replace(regex, `<span class="acronym-tag" data-acronym="$1">$1</span>`);
     });
     node.innerHTML = html;
   });
 
-  // Attach hover events to tags
   document.querySelectorAll(".acronym-tag").forEach((tag) => {
     tag.addEventListener("mouseenter", (e) => {
       const code = tag.dataset.acronym;
@@ -352,7 +562,6 @@ function initAcronymTooltips() {
       let top = rect.bottom + 8;
       let left = rect.left + rect.width / 2 - 140;
 
-      // Viewport bounds check
       if (left < 10) left = 10;
       if (left + 280 > window.innerWidth) left = window.innerWidth - 290;
       if (top + 160 > window.innerHeight) top = rect.top - 170;
@@ -410,8 +619,8 @@ function initCustomCursor() {
   requestAnimationFrame(renderCursor);
 
   document.body.addEventListener("mouseover", (e) => {
-    const magneticEl = e.target.closest(".spec-card, .module-card, .mission-card");
-    const clickableEl = e.target.closest("a, .nav-item, .fnav-btn, .sb-toggle, .theme-btn, .blueprint-img, .acronym-tag");
+    const magneticEl = e.target.closest(".spec-card, .module-card, .mission-card, .cmd-result-item");
+    const clickableEl = e.target.closest("a, .nav-item, .fnav-btn, .sb-toggle, .theme-btn, .blueprint-img, .acronym-tag, .search-trigger, .cmd-filter-btn");
     if (magneticEl) {
       hoverTarget = magneticEl;
       cursor.classList.add("magnetic");
@@ -424,8 +633,8 @@ function initCustomCursor() {
   });
 
   document.body.addEventListener("mouseout", (e) => {
-    const magneticEl = e.target.closest(".spec-card, .module-card, .mission-card");
-    const clickableEl = e.target.closest("a, .nav-item, .fnav-btn, .sb-toggle, .theme-btn, .blueprint-img, .acronym-tag");
+    const magneticEl = e.target.closest(".spec-card, .module-card, .mission-card, .cmd-result-item");
+    const clickableEl = e.target.closest("a, .nav-item, .fnav-btn, .sb-toggle, .theme-btn, .blueprint-img, .acronym-tag, .search-trigger, .cmd-filter-btn");
     if (magneticEl || clickableEl) {
       hoverTarget = null;
       cursor.classList.remove("magnetic", "hover");
@@ -459,19 +668,16 @@ function initKeyboardNav() {
 
 // ── Init & Initial Hash Handler ───────────────────────
 document.addEventListener("DOMContentLoaded", () => {
-  // Theme check
   const savedTheme = localStorage.getItem("theme");
   if (savedTheme === "dark" || (!savedTheme && window.matchMedia("(prefers-color-scheme: dark)").matches)) {
     document.body.classList.add("dark-theme");
   }
   updateThemeLabel(document.body.classList.contains("dark-theme"));
 
-  // Sidebar collapse check
   if (window.innerWidth >= 769 && localStorage.getItem("sidebarCollapsed") === "1") {
     document.body.classList.add("sidebar-collapsed");
   }
 
-  // Initial Section from Hash
   const hash = window.location.hash.replace("#", "");
   if (hash && sectionMap[hash]) {
     show(hash, false);
@@ -480,6 +686,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (initialSection) {
       applyAnimations(initialSection);
       buildSubTOC(initialSection);
+      updateBreadcrumbs("overview");
     }
   }
 
@@ -488,6 +695,7 @@ document.addEventListener("DOMContentLoaded", () => {
   initKeyboardNav();
   initBlueprintLightbox();
   initAcronymTooltips();
+  initCommandPalette();
 
   const overlay = document.getElementById("sidebar-overlay");
   if (overlay) overlay.addEventListener("click", () => document.body.classList.remove("sidebar-open"));
